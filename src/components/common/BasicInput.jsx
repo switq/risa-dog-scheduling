@@ -42,7 +42,7 @@ export const BasicInput = ({ name, type = "", label, required, ...props}) => {
                 {label || name}
                 {required && <RequiredLabel>*</RequiredLabel>}
             </Label>
-            <Field as={FieldStyled} name={name} type={type} autocomplete="off" {...props} />
+            <Field as={FieldStyled} name={name} type={type} autoComplete="off" {...props} />
             <ErrorMessage name={name} component={ErrorStyled}/>
         </InputWrapper>
     )

@@ -9,6 +9,8 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup"
 import { BasicInput } from "../common/BasicInput";
 import { CRow } from "../common/Containers.style";
+import { type } from "@testing-library/user-event/dist/type";
+import Modal from "react-modal";
 
 const StepContainer = styled(CRow)`
     justify-content: space-around;
@@ -36,13 +38,13 @@ function IncluirClienteModal() {
     const initialValues = {
         nome: "",
         email: "",
-        cpf: "",
+        cpf: "11111111111",
         dtNasc: "",
-        tel1: "",
+        tel1: "33",
         tel2: "",
-        cep: "",
+        cep: "111113111",
         logradouro: "",
-        numeroRes: "",
+        numeroRes: "4",
         bairro: "",
         localidade: "",
         uf: "",
@@ -78,7 +80,8 @@ function IncluirClienteModal() {
     const handleSubmit = (values, { setSubmitting }) =>
     {
         console.log(values);
-        setSubmitting(false);
+        // setSubmitting(false);
+        setStep(0);
     }
 
     return (
@@ -108,23 +111,40 @@ function IncluirClienteModal() {
                     validationSchema={validationSchema}
                 >
                     {({ values, isSubimitting }) => (
-                        getCompStep()
+                        <Form>
+                            {getCompStep()}
+                            <div>
+                                <Button
+                                    onClick={_ => step !== 0 ? setStep(step - 1) : ""}
+                                    type={"button"}
+                                >
+                                    {step !== 0 ? "Voltar" : "Fechar"}
+                                </Button>
+                                <Button
+                                    $roxo
+                                    onClick={(e) => {
+                                        if (step !== 2) {
+                                            setStep(step + 1);
+                                            e.target.type = "button";
+                                        }
+                                        else {
+                                            e.target.type = "submit";
+                                            setStep(0);
+                                        }
+                                    }}
+                                    type={"button"}
+                                    disabled={isSubimitting}
+                                >
+                                    {step !== 2 ? "Próximo" : "Salvar"}
+                                </Button>
+                            </div>
+                        </Form>
                     )}
                 </Formik>
             </div>
 
             <div>
-                <Button
-                    onClick={_ => step !== 0 ? setStep(step - 1) : ""}
-                >
-                    {step !== 0 ? "Voltar" : "Fechar"}
-                </Button>
-                <Button 
-                    $roxo
-                    onClick={_ => step !== 2 ? setStep(step + 1) : 0}
-                >
-                    {step !== 2 ? "Próximo" : "Salvar"}
-                </Button>
+                
             </div>
         </div>
     )
