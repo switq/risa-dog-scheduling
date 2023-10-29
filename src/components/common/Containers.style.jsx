@@ -1,13 +1,19 @@
 import styled from "styled-components";
 
-export const CRow = styled.div`
+export const CRowStyle = styled.div`
     display: flex;
     align-itens: center;
-    justify-content: ${(props) => props.jContent? props.jContent : "center"};
+    justify-content: center;
     justify-itens: center;
-    gap: 1.5em;
+    gap: 1em;
 `
-export const CCol = styled.div`
+export const CRow = ({...props}) => (
+    <CRowStyle style={ {...props}}>
+        {props.children}
+    </CRowStyle>
+)
+
+export const CColStyle = styled.div`
     display: flex;
     flex-direction: column;
     align-itens: center;
@@ -15,3 +21,9 @@ export const CCol = styled.div`
     justify-itens: center;
     gap: 1em;
 `
+export const CCol = ({ ...props }) => (
+    <CColStyle style={{...props}}>
+        {props.children}
+    </CColStyle>
+)
+

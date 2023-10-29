@@ -7,17 +7,37 @@ import IncluirEndereco from "./IncluirEndereco";
 import IncluirAnimais from "./IncluirAnimais";
 import { Form, Formik } from "formik";
 import * as Yup from "yup"
-import { BasicInput } from "../common/BasicInput";
-import { CRow } from "../common/Containers.style";
-import { type } from "@testing-library/user-event/dist/type";
+import { CRow, CCol, CRowStyle, CColStyle } from "../common/Containers.style";
 import Modal from "react-modal";
+import { ModalTittle } from "../common/Modal.style";
 
-const StepContainer = styled(CRow)`
-    justify-content: space-around;
+const StepContainer = styled(CRowStyle)`
+    justify-content: space-between;
     align-itens: flex-start;
 `
 
-function IncluirClienteModal() {
+const BackFowardWrapper = styled(CRowStyle)`
+    justify-content: space-between;
+    margin-top: 4rem
+`
+
+const incluirClienteStyle = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        width: '650',
+        height: '650px',
+        borderRadius: '15px',
+        padding: '3rem'
+    },
+}
+
+
+function IncluirClienteModal({ ...props }) {
 
     let [step, setStep] = useState(0)
     const Steps = ["Dados do cliente", "Endereço", "Animais"];
@@ -36,7 +56,7 @@ function IncluirClienteModal() {
     }
 
     const initialValues = {
-        nome: "",
+        nome: "111",
         email: "",
         cpf: "11111111111",
         dtNasc: "",
@@ -62,7 +82,7 @@ function IncluirClienteModal() {
             .required("Campo obrigatório"),
         dtNasc: Yup.date()
             .max(new Date(), "Não é possível incluir uma data futura"),
-            // lembrar de colocar uma data minima se possivel
+        // lembrar de colocar uma data minima se possivel
         tel1: Yup.string()
             .max(13, "O número de celular deve possuir no máximo 13 caracteres")
             .required("Campo obrigatório"),
@@ -74,79 +94,79 @@ function IncluirClienteModal() {
             .required("Campo obrigatório"),
         numeroRes: Yup.string()
             .required("Campo obrigatório"),
-        
-});
 
-    const handleSubmit = (values, { setSubmitting }) =>
-    {
+    });
+
+    const handleSubmit = (values, { setSubmitting }) => {
         console.log(values);
         // setSubmitting(false);
         setStep(0);
     }
 
     return (
-        <div>
-            <h2>Incluir Cliente</h2>
-            <hr />
+        <Modal
+            {...props}
+            style={incluirClienteStyle}
+        >
+            <Formik
+                onSubmit={handleSubmit}
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+            >
+                {({ values, isSubimitting }) => (
+                    <Form>
 
-            <StepContainer>
-                {Steps.map((item, index) => (
-                    <>
-                        {index ? <Foward>{">"}</Foward> : ""}
-                        <Step 
-                            $ativo={index === step} 
-                            key={index} 
-                            onClick={_ => setStep(index)}
-                        >
-                            {item}
-                        </Step>
-                    </>
-                ))}
-            </StepContainer>
-            
-            <div>
-                <Formik
-                    onSubmit={handleSubmit}
-                    initialValues={initialValues}
-                    validationSchema={validationSchema}
-                >
-                    {({ values, isSubimitting }) => (
-                        <Form>
-                            {getCompStep()}
-                            <div>
-                                <Button
-                                    onClick={_ => step !== 0 ? setStep(step - 1) : ""}
-                                    type={"button"}
-                                >
-                                    {step !== 0 ? "Voltar" : "Fechar"}
-                                </Button>
-                                <Button
-                                    $roxo
-                                    onClick={(e) => {
-                                        if (step !== 2) {
-                                            setStep(step + 1);
-                                            e.target.type = "button";
-                                        }
-                                        else {
-                                            e.target.type = "submit";
-                                            setStep(0);
-                                        }
-                                    }}
-                                    type={"button"}
-                                    disabled={isSubimitting}
-                                >
-                                    {step !== 2 ? "Próximo" : "Salvar"}
-                                </Button>
-                            </div>
-                        </Form>
-                    )}
-                </Formik>
-            </div>
+                        <CCol gap="0" margin-bottom="2em">
+                            <ModalTittle>{Steps[step]}</ModalTittle>
 
-            <div>
-                
-            </div>
-        </div>
+                            <StepContainer>
+                                {Steps.map((item, index) => (
+                                    <>
+                                        {index ? <Foward>{">"}</Foward> : ""}
+                                        <Step
+                                            $ativo={index === step}
+                                            key={index}
+                                            onClick={_ => setStep(index)}
+                                        >
+                                            {item}
+                                        </Step>
+                                    </>
+                                ))}
+                            </StepContainer>
+                        </CCol>
+
+                        {getCompStep()}
+
+                        <BackFowardWrapper>
+                            <Button
+                                onClick={_ => step !== 0 ? setStep(step - 1) : ""}
+                                type={"button"}
+                            >
+                                {step !== 0 ? "Voltar" : "Fechar"}
+                            </Button>
+                            <Button
+                                $roxo
+                                onClick={(e) => {
+                                    if (step !== 2) {
+                                        setStep(step + 1);
+                                        e.target.type = "button";
+                                    }
+                                    else {
+                                        e.target.type = "submit";
+                                        setStep(0);
+                                    }
+                                }}
+                                type={"button"}
+                                disabled={isSubimitting}
+                            >
+                                {step !== 2 ? "Próximo" : "Salvar"}
+                            </Button>
+                        </BackFowardWrapper>
+
+                    </Form>
+                )}
+            </Formik>
+        </Modal>
     )
 }
 
