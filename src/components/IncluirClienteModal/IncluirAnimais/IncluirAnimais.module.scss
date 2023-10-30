@@ -1,0 +1,10 @@
+.animaisContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    max-height: 22rem;
+    overflow-y: scroll;
+    padding: 1em;
+    border-radius: .8rem;
+    background-color: var(--dark03);
+}

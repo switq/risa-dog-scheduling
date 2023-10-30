@@ -1,9 +1,8 @@
-import styled from "styled-components";
-import { CRow } from "../../common/Containers.style";
 import AnimalCard, { AddAnimal } from "../../common/AnimalCard";
 import IncluirAnimalModal from "./IncluirAnimalModal";
 import { useContext, useState } from "react";
 import IncluirClienteContext from "../../../contexts/IncluirClienteContext";
+import style from './IncluirAnimais.module.scss';
 
 
 function IncluirAnimais() {
@@ -20,12 +19,12 @@ function IncluirAnimais() {
 
     return (
         <div>
-            <CRow>
+            <div className={style.animaisContainer}>
                 {animais.map(animal => (
                     <AnimalCard key={animal.id} id={animal.id} ativo={true} toggleModal={modalToggle}/>
                 ))}
                 <AddAnimal toggleModal={modalToggle} />
-            </CRow>
+            </div>
             <IncluirAnimalModal id={activeId} closeModal={modalToggle} isOpen={isOpenAnimal} onRequestClose={modalToggle} />
         </div>
     )

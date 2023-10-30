@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { CRowStyle } from "./Containers.style";
 
 export const Step = styled.span`
     display: flex;
@@ -30,4 +31,15 @@ export const Step = styled.span`
 export const Foward = styled.span`
     font-size: 2.25rem;
     text-align: center
+`
+
+export const StepContainer = styled(CRowStyle)`
+    justify-content: space-between;
+    align-itens: flex-start;
+    margin-bottom: 1rem;
+`
+
+export const BackFowardWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
 `

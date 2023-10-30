@@ -8,9 +8,25 @@ import { Button } from "../../../common/Button.style";
 import IncluirClienteContext from "../../../../contexts/IncluirClienteContext";
 import { useContext } from "react";
 import { v4 as uuid4 } from 'uuid';
+import style from './IncluirAnimalModal.module.scss';
+import { Trash } from '../../../../assets/icons/trash';
 
-export default function IncluirAnimalModal({ id='', closeModal, ...props}) {
+const incluirAnimalStyle = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        width: '550px',
+        height: '600px',
+        borderRadius: '15px',
+        padding: '3rem'
+    },
+}
 
+export default function IncluirAnimalModal({ id = '', closeModal, ...props }) {
 
     let initialValues = {
         nome: 'normal',
@@ -18,15 +34,15 @@ export default function IncluirAnimalModal({ id='', closeModal, ...props}) {
         especie: '',
         raca: '',
         obs: '',
+        status: '',
     };
 
     const { cliente, setCliente } = useContext(IncluirClienteContext);
 
     if (id != '') {
         const animal = cliente.animais.find(animal => animal.id == id);
-        initialValues = {...initialValues, ...animal};
+        initialValues = { ...initialValues, ...animal };
     }
-
 
     const validationSchema = Yup.object({
         nome: Yup.string()
@@ -42,43 +58,60 @@ export default function IncluirAnimalModal({ id='', closeModal, ...props}) {
         closeModal();
 
         setCliente(prevCliente => {
-            const newCliente = {...prevCliente};
-            
-            if ( id != '') {
-                let animalIndex = newCliente.animais.findIndex(animal => animal.id == id);
-                newCliente.animais[animalIndex] = { ...newCliente.animais[animalIndex], ...values};
+            const newCliente = { ...prevCliente };
+
+            if (id != '') {
+                const animalIndex = newCliente.animais.findIndex(animal => animal.id == id);
+                newCliente.animais[animalIndex] = { ...newCliente.animais[animalIndex], ...values };
             } else {
-                newCliente.animais.push({id: uuid4(), ...values});
+                newCliente.animais.push({ id: uuid4(), ...values });
             }
-                
+
             return newCliente;
         })
-        
+    }
+
+    const deletarAnimal = () => {
+        if (id != '') {
+            const animalIndex = cliente.animais.findIndex(animal => animal.id == id);
+            setCliente(prevCliente => {
+                const newCliente = {...prevCliente};
+                newCliente.animais.splice(animalIndex, 1);
+                return newCliente;
+            })
+        }
+        closeModal();
     }
 
     return (
-        <Modal {...props}>
-            <ModalTittle>Incluir animal</ModalTittle>
+        <Modal {...props} style={incluirAnimalStyle}>
             <Formik
                 onSubmit={handleSubmit}
                 initialValues={initialValues}
                 validationSchema={validationSchema}
+                className={style.formik}
             >
                 {({ values, isSubimitting }) => (
-                    <Form>
-                        <CCol>
-                            <BasicInput name="nome" required />
-                            <BasicInput name="rga" label={"RGA"} />
-                            <CRow>
-                                <BasicInput name="especie" label={"Espécie"} required />
-                                <BasicInput name="raca" label={"Raça"} />
-                            </CRow>
-                            <BasicInput name="obs" label={"Observações"} type="text-area" />
-                            <CRow justify-content={"space-between"}>
-                                <Button type="button" onClick={closeModal} >Cancelar</Button>
-                                <Button $roxo type="submit">Salvar</Button>
-                            </CRow>
-                        </CCol>
+                    <Form className={style.form}>
+                        <div>
+                            <ModalTittle>Incluir animal</ModalTittle>
+                            <CCol>
+                                <BasicInput name="nome" required />
+                                <BasicInput name="rga" label={"RGA"} />
+                                <CRow>
+                                    <BasicInput name="especie" label={"Espécie"} required />
+                                    <BasicInput name="raca" label={"Raça"} />
+                                </CRow>
+                                <BasicInput name="obs" label={"Observações"} className={style.obs} />
+                            </CCol>
+                        </div>
+                        <span onClick={deletarAnimal} className={style.trash}>
+                            <Trash />
+                        </span>
+                        <CRow justify-content={"space-between"}>
+                            <Button type="button" onClick={closeModal} >Cancelar</Button>
+                            <Button $roxo type="submit">Salvar</Button>
+                        </CRow>
                     </Form>
                 )}
             </Formik>

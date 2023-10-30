@@ -11,54 +11,39 @@ const AppContainer = styled.div`
 `
 
 function App() {
-  const [modalIsOpen, setModalIsOpen] = useState(true);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   function toggleModal() {
     setModalIsOpen(!modalIsOpen);
   }
 
-  const [cliente, setCliente] = useState(
-    {
-      id: '',
-      nome: "gui",
-      email: "",
-      cpf: "11111111111",
-      dtNasc: "",
-      tel1: "33",
-      tel2: "",
-      cep: "111111111",
-      logradouro: "",
-      numeroRes: "4",
-      bairro: "",
-      localidade: "",
-      uf: "",
-      animais: [
-        {
-          id: '1',
-          nome: 'Lolla',
-          especie: 'Cachorro',
-        },
-        {
-          id: '2',
-          nome: 'Toby',
-          especie: 'Gato',
-        },
-      ],
-    });
+  const initial = {
+    id: "",
+    nome: "",
+    email: "",
+    cpf: "",
+    dtNasc: "",
+    tel1: "",
+    tel2: "",
+    cep: "",
+    logradouro: "",
+    numeroRes: "",
+    bairro: "",
+    localidade: "",
+    uf: "",
+    animais: [],
+    status: '',
+  }
 
   return (
     <AppContainer>
       <button onClick={toggleModal}>Abra</button>
 
-
-      <IncluirClienteContext.Provider value={{ cliente, setCliente }}>
-
         <IncluirClienteModal
           isOpen={modalIsOpen}
           onRequestClose={toggleModal}
+          dados={initial}
         />
-
-      </IncluirClienteContext.Provider>
 
     </AppContainer>
   );

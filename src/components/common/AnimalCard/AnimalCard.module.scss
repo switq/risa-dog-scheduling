@@ -1,0 +1,27 @@
+.addAnimal {
+    border: .3rem dashed var(--roxo);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    justify-items: center;
+    gap: 1em;
+    width: 100%;
+    color: var(--light);
+    border-radius: .8em;
+    padding: 0 1.5em;
+    justify-content: space-between;
+    background-color: var(--roxo03);
+    cursor: pointer;
+    max-height: 6em;
+    
+    
+}
+
+.mais {
+    font-size: 3rem;
+}
+
+.roxo {
+    color: var(--roxo);
+}
+
