@@ -31,21 +31,6 @@ const incluirSolicitacaoStyle = {
   },
 }
 
-const users = [
-  {
-    nome: 'A',
-    cpf: 111,
-  },
-  {
-    nome: 'B',
-    cpf: 112,
-  },
-  {
-    nome: 'C',
-    cpf: 123,
-  },
-]
-
 function IncluirSolicitacaoModal() {
   const [step, setStep] = useState(0);
   const Steps = ["Nova Solicitação", "Agendamento", "Pagamento"];

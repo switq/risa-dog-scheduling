@@ -17,24 +17,6 @@ function App() {
     setModalIsOpen(!modalIsOpen);
   }
 
-  const initial = {
-    id: "",
-    nome: "",
-    email: "",
-    cpf: "",
-    dtNasc: "",
-    tel1: "",
-    tel2: "",
-    cep: "",
-    logradouro: "",
-    numeroRes: "",
-    bairro: "",
-    localidade: "",
-    uf: "",
-    animais: [],
-    status: '',
-  }
-
   return (
     <AppContainer>
       <button onClick={toggleModal}>Abra</button>
@@ -42,7 +24,6 @@ function App() {
         <IncluirClienteModal
           isOpen={modalIsOpen}
           onRequestClose={toggleModal}
-          dados={initial}
         />
 
         <IncluirSolicitacaoModal />
