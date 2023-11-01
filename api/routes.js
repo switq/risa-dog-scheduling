@@ -6,12 +6,13 @@ const clientesController = require('./controllers/ClientesController')
 const animaisController = require('./controllers/AnimaisController')
 const agendasController = require('./controllers/AgendasController')
 
-routes.use(authMiddeware)
 
 // Colaboradores
-routes.get('/agendas', colaboradoresController.index)
 routes.post('/cadastro', colaboradoresController.create)
 routes.post('/login', colaboradoresController.login)
+
+// routes.use(authMiddeware)
+routes.get('/agendas', colaboradoresController.index)
 
 // Clientes
 routes.post('/agendas/nova-solicitacao', clientesController.create)

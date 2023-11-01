@@ -14,6 +14,7 @@ import { useContext } from "react";
 import style from './IncluirClienteModal.module.scss';
 import { BackFowardWrapper, StepContainer } from '../common/Step'
 import { v4 as uuid4 } from 'uuid';
+import axios from "axios";
 
 
 const incluirClienteStyle = {
@@ -54,9 +55,18 @@ function IncluirClienteModal({
     const [cliente, setCliente] = useState(dados);
 
     const handleSubmit = (values, { setSubmitting }) => {
-        console.log(values);
         setStep(0);
-        console.log('foda?')
+        delete values.animais;
+        delete values.id;
+        values.status = 'Ativo'
+        console.log(values);
+        axios.post('http://localhost:3001/agendas/nova-solicitacao', values)
+            .then(() => {
+                console.log("deu")
+            })
+            .catch(() => {
+                console.log("n deu")
+            });
     }
 
     let [step, setStep] = useState(0)

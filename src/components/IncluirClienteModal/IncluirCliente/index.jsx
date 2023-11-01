@@ -14,8 +14,8 @@ function IncluirCliente() {
                 <BasicInput name="dtNasc" label={"Data de Nascimento"} type={"date"} />
             </CRow>
             <CRow>
-                <BasicInput name="tel1" label={"Telefone"} type="number" required />
-                <BasicInput name="tel2" label={"Telefone Residêncial"} type="number" />
+                <BasicInput name="tel1" label={"Telefone"} required />
+                <BasicInput name="tel2" label={"Telefone Residêncial"} />
             </CRow>
         </CCol>
 

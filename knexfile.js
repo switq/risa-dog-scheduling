@@ -6,9 +6,9 @@
 module.exports = {
     client: 'mysql2',
     connection: {
-      database: 'risadb',
+      database: 'mydb',
       user:     'root',
-      password: 'Lele102003@$'
+      password: ''
     },
     pool: {
       min: 2,
