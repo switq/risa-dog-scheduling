@@ -2,7 +2,7 @@ import { useState } from "react";
 import IncluirClienteModal from "../components/IncluirClienteModal";
 import Modal from "react-modal";
 import styled from "styled-components";
-import IncluirClienteContext from "../contexts/IncluirClienteContext";
+import IncluirSolicitacaoModal from "../components/IncluirSolicitacaoModal";
 
 Modal.setAppElement('#root');
 
@@ -44,6 +44,8 @@ function App() {
           onRequestClose={toggleModal}
           dados={initial}
         />
+
+        <IncluirSolicitacaoModal />
 
     </AppContainer>
   );

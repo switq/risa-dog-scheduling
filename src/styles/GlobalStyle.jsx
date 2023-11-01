@@ -10,6 +10,7 @@ export const GlobalStyle = createGlobalStyle`
         --roxo04: #B69CD8;
         --light: #fff;
         --dark: #222;
+        --dark02: #DAC9F150;
         --dark03: #DAC9F130;
         --gray: #ccc;
     }

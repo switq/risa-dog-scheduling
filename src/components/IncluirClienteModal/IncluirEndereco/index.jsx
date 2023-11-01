@@ -1,4 +1,4 @@
-import { BasicInput } from "../../common/BasicInput";
+import { BasicInput } from "../../common/Inputs/BasicInput";
 import { CRow, CCol } from "../../common/Containers.style";
 import { Form } from "formik";
 

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import styled from "styled-components";
 import { Button } from "../common/Button.style";
 import { Step, Foward } from "../common/Step";
 import IncluirCliente from "./IncluirCliente";
@@ -51,7 +50,7 @@ function IncluirClienteModal({
         uf: "",
         animais: [],
     }, ...props }) {
-    
+
     const [cliente, setCliente] = useState(dados);
 
     const handleSubmit = (values, { setSubmitting }) => {

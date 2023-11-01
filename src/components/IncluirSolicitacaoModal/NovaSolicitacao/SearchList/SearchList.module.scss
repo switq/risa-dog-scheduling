@@ -1,0 +1,21 @@
+.searchList {
+    background-color: var(--dark03);
+    overflow-y: scroll;
+    border-radius: .8em;
+    height: 20rem;
+}
+
+.searchItem {
+    list-style: none;
+    padding: 1em;
+    border-bottom: 2px solid var(--dark02);
+}
+
+.searchItem:hover {
+    background-color: var(--dark02);
+    cursor: pointer;
+}
+
+.cpf {
+    font-size: .8em;
+}

@@ -1,7 +1,7 @@
 import Modal from "react-modal"
 import { ModalTittle } from "../../../common/Modal.style";
 import { Formik, Form } from "formik";
-import { BasicInput } from "../../../common/BasicInput";
+import { BasicInput } from "../../../common/Inputs/BasicInput";
 import { CRow, CCol } from "../../../common/Containers.style";
 import * as Yup from "yup"
 import { Button } from "../../../common/Button.style";
@@ -75,7 +75,7 @@ export default function IncluirAnimalModal({ id = '', closeModal, ...props }) {
         if (id != '') {
             const animalIndex = cliente.animais.findIndex(animal => animal.id == id);
             setCliente(prevCliente => {
-                const newCliente = {...prevCliente};
+                const newCliente = { ...prevCliente };
                 newCliente.animais.splice(animalIndex, 1);
                 return newCliente;
             })
