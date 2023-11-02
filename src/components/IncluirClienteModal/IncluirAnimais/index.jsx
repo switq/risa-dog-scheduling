@@ -5,7 +5,8 @@ import IncluirClienteContext from "../../../contexts/IncluirClienteContext";
 import style from './IncluirAnimais.module.scss';
 
 
-function IncluirAnimais() {
+function IncluirAnimais({ cliente, setCliente, selecionado='', setSelecionado='', ...props}) {
+
     const [isOpenAnimal, setIsOpenAnimal] = useState(false);
     const modalToggle = (id='') => {
         if ( id != '') setActiveId(id);
@@ -15,17 +16,29 @@ function IncluirAnimais() {
 
     const [activeId, setActiveId] = useState('');
 
-    const animais = useContext(IncluirClienteContext).cliente.animais;
+    const animais = cliente.animais;
 
     return (
         <div>
             <div className={style.animaisContainer}>
-                {animais.map(animal => (
-                    <AnimalCard key={animal.id} id={animal.id} ativo={true} toggleModal={modalToggle}/>
-                ))}
+                {animais.map((animal, index) => {
+                    let isAtivo = false
+                    if (setSelecionado === '') isAtivo = true
+                    return (
+                        <AnimalCard
+                            setSelecionado={setSelecionado}
+                            ativo={selecionado.id === animal.id || isAtivo}
+                            cliente={cliente} 
+                            key={animal.id} 
+                            id={animal.id} 
+                            toggleModal={modalToggle}
+                        />
+                    )
+                })}
                 <AddAnimal toggleModal={modalToggle} />
             </div>
-            <IncluirAnimalModal id={activeId} closeModal={modalToggle} isOpen={isOpenAnimal} onRequestClose={modalToggle} />
+
+            <IncluirAnimalModal cliente={cliente} setCliente={setCliente} id={activeId} closeModal={modalToggle} isOpen={isOpenAnimal} onRequestClose={modalToggle} />
         </div>
     )
 }

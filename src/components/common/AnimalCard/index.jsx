@@ -1,9 +1,6 @@
 import styled from "styled-components"
 import { CRow, CCol, CRowStyle } from "../Containers.style"
 import { EditPen } from "../../../assets/icons/editPen"
-import { useContext } from "react"
-import IncluirClienteContext from "../../../contexts/IncluirClienteContext"
-import IncluirAnimalModal from "../../IncluirClienteModal/IncluirAnimais/IncluirAnimalModal"
 import style from "./AnimalCard.module.scss"
 
 const AnimalCardContainer = styled(CRowStyle)`
@@ -16,19 +13,24 @@ const AnimalCardContainer = styled(CRowStyle)`
     max-height: 6em;
     background-color: var(--roxo03);
     align-items: center;
+    box-shadow: 1.5px 3px 4px #2226;
 `
 
-export default function AnimalCard({ id, ativo, toggleModal, ...props }) {
+export default function AnimalCard({ id, ativo, toggleModal, cliente, setSelecionado='', ...props }) {
 
-    const { cliente } = useContext(IncluirClienteContext);
     const animal = cliente.animais.find(animal => animal.id === id);
 
     const editAnimal = () => {
         toggleModal(id)
     }
 
+    function selecionarAnimal() {
+        if (setSelecionado === '') return
+        setSelecionado(animal);
+    }
+
     return (
-        <AnimalCardContainer style={ativo ? { background: 'var(--magenta)', cursor: 'default' } : {}}>
+        <AnimalCardContainer onClick={selecionarAnimal} style={ativo ? { background: 'var(--magenta)', cursor: 'default' } : {}}>
             <CCol alignContent="baseline" alignItens="center" gap=".4em">
                 <CRow gap=".5em">
                     <h3 className={style.nome}>{animal.nome}</h3>

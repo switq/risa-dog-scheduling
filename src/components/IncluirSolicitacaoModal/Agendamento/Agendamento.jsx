@@ -1,7 +1,10 @@
+import style from './Agendamento.module.scss';
+
 function Agendamento() {
     return (
         <div>
-            Agendamento
+            <p>{"Guilherme R."} | {"Lolla - Cão - P"}</p>
+            <hr />
         </div>
     );
 }

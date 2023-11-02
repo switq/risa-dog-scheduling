@@ -4,14 +4,19 @@ import { Field, ErrorMessage } from "formik";
 
 const { InputWrapper, Label, RequiredLabel, FieldStyled, ErrorStyled } = styles();
 
-export const InputSearch = ({ name, value, onChange, label, required, ...props }) => {
+export const InputSelect = ({ name, label, options, required, ...props }) => {
     return (
         <InputWrapper>
             <Label>
                 {label || name}
                 {required && <RequiredLabel>*</RequiredLabel>}
             </Label>
-            <FieldStyled value={value} onChange={onChange} name={name} type="search" autoComplete="off" {...props} />
+            <Field as={FieldStyled} name={name} autoComplete="off" {...props}>
+                {options.map((opt, index) => (
+                    <option value={opt.value}>{opt.label}</option>
+                ))}
+            </Field>
+            <ErrorMessage name={name} component={ErrorStyled} />
         </InputWrapper>
     )
 };
@@ -24,7 +29,7 @@ function styles() {
     flex-grow: ${props => props.flexG ? props.flexG : "1"};
 `;
 
-    const FieldStyled = styled.input`
+    const FieldStyled = styled.select`
     border-radius: 0.3rem;
     border: none;
     padding: .5em;

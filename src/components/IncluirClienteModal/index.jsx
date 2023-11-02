@@ -6,15 +6,13 @@ import IncluirEndereco from "./IncluirEndereco";
 import IncluirAnimais from "./IncluirAnimais";
 import { Form, Formik } from "formik";
 import * as Yup from "yup"
-import { CRow, CCol, CRowStyle, CColStyle } from "../common/Containers.style";
+import { CCol } from "../common/Containers.style";
 import Modal from "react-modal";
 import { ModalTittle } from "../common/Modal.style";
 import IncluirClienteContext from "../../contexts/IncluirClienteContext";
-import { useContext } from "react";
 import style from './IncluirClienteModal.module.scss';
 import { BackFowardWrapper, StepContainer } from '../common/Step'
 import { v4 as uuid4 } from 'uuid';
-import axios from "axios";
 
 
 const incluirClienteStyle = {
@@ -56,17 +54,7 @@ function IncluirClienteModal({
 
     const handleSubmit = (values, { setSubmitting }) => {
         setStep(0);
-        delete values.animais;
-        delete values.id;
-        values.status = 'Ativo'
         console.log(values);
-        axios.post('http://localhost:3001/agendas/nova-solicitacao', values)
-            .then(() => {
-                console.log("deu")
-            })
-            .catch(() => {
-                console.log("n deu")
-            });
     }
 
     let [step, setStep] = useState(0)
@@ -79,7 +67,7 @@ function IncluirClienteModal({
             case 1:
                 return <IncluirEndereco />;
             case 2:
-                return <IncluirAnimais />;
+                return <IncluirAnimais cliente={cliente} setCliente={setCliente} />;
             default:
                 return <IncluirCliente />;
         }
@@ -127,7 +115,7 @@ function IncluirClienteModal({
                     className={style.formik}
                 >
                     {({ values, isSubimitting }) => (
-                        <Form className={style.form}>
+                        <Form key={uuid4} className={style.form}>
 
                             <CCol gap="0">
                                 <ModalTittle>{Steps[step]}</ModalTittle>
@@ -135,10 +123,10 @@ function IncluirClienteModal({
                                 <StepContainer>
                                     {Steps.map((item, index) => (
                                         <>
-                                            {index ? <Foward key={uuid4()}>{">"}</Foward> : ""}
+                                            {index ? <Foward key={uuid4}>{">"}</Foward> : ""}
                                             <Step
-                                                $ativo={index === step}
                                                 key={index}
+                                                $ativo={index === step}
                                                 onClick={_ => setStep(index)}
                                             >
                                                 {item}

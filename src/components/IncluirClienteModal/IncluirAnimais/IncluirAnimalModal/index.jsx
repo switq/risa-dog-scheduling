@@ -10,6 +10,7 @@ import { useContext } from "react";
 import { v4 as uuid4 } from 'uuid';
 import style from './IncluirAnimalModal.module.scss';
 import { Trash } from '../../../../assets/icons/trash';
+import { InputSelect } from "../../../common/Inputs/InputSelect";
 
 const incluirAnimalStyle = {
     content: {
@@ -26,18 +27,17 @@ const incluirAnimalStyle = {
     },
 }
 
-export default function IncluirAnimalModal({ id = '', closeModal, ...props }) {
+export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCliente, ...props }) {
 
     let initialValues = {
         nome: 'normal',
         rga: '',
+        porte: '',
         especie: '',
         raca: '',
         obs: '',
         status: '',
     };
-
-    const { cliente, setCliente } = useContext(IncluirClienteContext);
 
     if (id != '') {
         const animal = cliente.animais.find(animal => animal.id == id);
@@ -92,12 +92,15 @@ export default function IncluirAnimalModal({ id = '', closeModal, ...props }) {
                 className={style.formik}
             >
                 {({ values, isSubimitting }) => (
-                    <Form className={style.form}>
+                    <Form key={uuid4} className={style.form}>
                         <div>
                             <ModalTittle>Incluir animal</ModalTittle>
                             <CCol>
                                 <BasicInput name="nome" required />
-                                <BasicInput name="rga" label={"RGA"} />
+                                <CRow>
+                                    <BasicInput name="rga" label={"RGA"} />
+                                    <InputSelect name="porte" required options={[{ value: 'P', label: 'Pequeno' }, { value: 'M', label: 'Médio' }, { value: 'G', label: 'Grande' },]}/>
+                                </CRow>
                                 <CRow>
                                     <BasicInput name="especie" label={"Espécie"} required />
                                     <BasicInput name="raca" label={"Raça"} />
@@ -108,7 +111,7 @@ export default function IncluirAnimalModal({ id = '', closeModal, ...props }) {
                         <span onClick={deletarAnimal} className={style.trash}>
                             <Trash />
                         </span>
-                        <CRow justify-content={"space-between"}>
+                        <CRow justifyContent={"space-between"}>
                             <Button type="button" onClick={closeModal} >Cancelar</Button>
                             <Button $roxo type="submit">Salvar</Button>
                         </CRow>

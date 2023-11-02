@@ -1,13 +1,8 @@
 import { useState } from "react";
 import { Button } from "../common/Button.style";
 import { Step, Foward } from "../common/Step";
-import { Form, Formik } from "formik";
-import * as Yup from "yup"
-import { CRow, CCol, CRowStyle, CColStyle } from "../common/Containers.style";
 import Modal from "react-modal";
 import { ModalTittle } from "../common/Modal.style";
-import IncluirClienteContext from "../../contexts/IncluirClienteContext";
-import { useContext } from "react";
 import { BackFowardWrapper, StepContainer } from '../common/Step'
 import { v4 as uuid4 } from 'uuid';
 import NovaSolicitacao from "./NovaSolicitacao";
@@ -32,7 +27,7 @@ const incluirSolicitacaoStyle = {
 }
 
 function IncluirSolicitacaoModal() {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
   const Steps = ["Nova Solicitação", "Agendamento", "Pagamento"];
 
   const getCompStep = () => {
@@ -50,7 +45,7 @@ function IncluirSolicitacaoModal() {
 
   return (
     <Modal
-      // isOpen={true}
+      isOpen={true}
       style={incluirSolicitacaoStyle}
     >
       
@@ -61,10 +56,10 @@ function IncluirSolicitacaoModal() {
           <StepContainer>
             {Steps.map((item, index) => (
               <>
-                {index ? <Foward>{">"}</Foward> : ""}
+                {index ? <Foward key={uuid4}>{">"}</Foward> : ""}
                 <Step
-                  $ativo={index === step}
                   key={index}
+                  $ativo={index === step}
                   onClick={_ => setStep(index)}
                   style={{width: '14rem'}}
                 >
