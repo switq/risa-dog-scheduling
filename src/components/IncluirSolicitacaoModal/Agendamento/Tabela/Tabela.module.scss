@@ -1,0 +1,45 @@
+.tabela {
+    width: 100%;
+    border-collapse: .5px;
+    border-radius: 10px;
+}
+
+.upDownTh {
+    width: 5%;
+}
+.servicosTh {
+    width: 15%;
+}
+.execucaoTh {
+    width: 20%;
+}
+.horaTh {
+    width: 15%;
+}
+.precoTh {
+    width: 15%;
+}
+.adicionalTh {
+    width: 15%;
+}
+.totalTh {
+    width: 15%;
+}
+
+.tabela th {
+    background-color: var(--magenta);
+    color: var(--light);
+    font-weight: 500;
+}
+
+.tabela tr {
+    background-color: var(--roxo03);
+}
+
+.tabela tr:nth-child(odd) {
+    background-color: var(--roxo05);
+}
+
+.tabela td {
+    padding: .5em;
+}

@@ -33,6 +33,7 @@ export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCl
         nome: 'normal',
         rga: '',
         porte: '',
+        genero: '',
         especie: '',
         raca: '',
         obs: '',
@@ -96,7 +97,10 @@ export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCl
                         <div>
                             <ModalTittle>Incluir animal</ModalTittle>
                             <CCol>
-                                <BasicInput name="nome" required />
+                                <CRow>
+                                    <BasicInput name="nome" required />
+                                    <InputSelect name="genero" label="Gênero" required options={[{ value: 'F', label: 'Fêmea' }, { value: 'M', label: 'Macho' },]}/>
+                                </CRow>
                                 <CRow>
                                     <BasicInput name="rga" label={"RGA"} />
                                     <InputSelect name="porte" required options={[{ value: 'P', label: 'Pequeno' }, { value: 'M', label: 'Médio' }, { value: 'G', label: 'Grande' },]}/>

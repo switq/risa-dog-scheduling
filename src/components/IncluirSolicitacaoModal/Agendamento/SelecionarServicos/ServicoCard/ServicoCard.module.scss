@@ -1,0 +1,12 @@
+.cardContainer {
+    background-color: var(--roxo03);
+    text-align: center;
+    width: 45%;
+    padding: 1rem;
+    border-radius: .8rem;
+    cursor: pointer;
+}
+
+.cardContainer:hover {
+    background-color: var(--roxo04);
+}

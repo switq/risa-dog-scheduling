@@ -40,13 +40,13 @@ function NovaSolicitacao() {
 
             <hr className={style.divisao}/>
 
-            {/* <SearchList users={users} setBusca={setBusca}/> */}
-            <IncluirAnimais
+            <SearchList users={users} setBusca={setBusca}/>
+            {/* <IncluirAnimais
                 selecionado={animalSelecionado}
                 setSelecionado={setAnimalSelecionado} 
                 cliente={cliente} 
                 setCliente={setCliente}
-            />
+            /> */}
         </div>
     );
 }

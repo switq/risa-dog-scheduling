@@ -6,8 +6,8 @@ import { ModalTittle } from "../common/Modal.style";
 import { BackFowardWrapper, StepContainer } from '../common/Step'
 import { v4 as uuid4 } from 'uuid';
 import NovaSolicitacao from "./NovaSolicitacao";
-import Agendamento from "./Agendamento/Agendamento";
-import Pagamento from "./Pagamento/Pagamento";
+import Agendamento from "./Agendamento";
+import Pagamento from "./Pagamento";
 import style from "./IncluirSolicitacaoModal.module.scss";
 
 const incluirSolicitacaoStyle = {
@@ -45,7 +45,7 @@ function IncluirSolicitacaoModal() {
 
   return (
     <Modal
-      isOpen={true}
+      // isOpen={true}
       style={incluirSolicitacaoStyle}
     >
       

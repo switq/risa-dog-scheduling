@@ -8,6 +8,7 @@ export const GlobalStyle = createGlobalStyle`
         --roxo02: #865ABF;
         --roxo03: #DAC9F1;
         --roxo04: #B69CD8;
+        --roxo05: #F0E4FF;
         --light: #fff;
         --dark: #222;
         --dark02: #DAC9F150;
