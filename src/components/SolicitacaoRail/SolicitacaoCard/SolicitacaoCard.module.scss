@@ -1,0 +1,23 @@
+.cardContainer {
+    display: flex;
+    background-color: var(--magenta);
+    width: 18rem;
+    justify-content: space-between;
+    padding: 1em;
+    color: var(--light);
+    fill: var(--light);
+    height: 8em;
+    border-radius: .5em;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.col2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

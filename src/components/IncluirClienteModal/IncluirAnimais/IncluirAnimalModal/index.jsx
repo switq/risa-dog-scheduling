@@ -40,6 +40,14 @@ export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCl
         status: '',
     };
 
+
+    const especies = [
+        { value: 'Cachorro', text: 'Cachorro' },
+        { value: 'Gato', text: 'Gato' },
+        { value: 'Ave', text: 'Ave' },
+        { value: 'Cobra', text: 'Cobra' },
+    ]
+
     if (id != '') {
         const animal = cliente.animais.find(animal => animal.id == id);
         initialValues = { ...initialValues, ...animal };
@@ -106,7 +114,7 @@ export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCl
                                     <InputSelect name="porte" required options={[{ value: 'P', label: 'Pequeno' }, { value: 'M', label: 'Médio' }, { value: 'G', label: 'Grande' },]}/>
                                 </CRow>
                                 <CRow>
-                                    <BasicInput name="especie" label={"Espécie"} required />
+                                    <InputSelect name="especie" label={"Espécie"} options={especies} required />
                                     <BasicInput name="raca" label={"Raça"} />
                                 </CRow>
                                 <BasicInput name="obs" label={"Observações"} className={style.obs} />

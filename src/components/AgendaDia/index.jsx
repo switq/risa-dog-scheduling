@@ -1,5 +1,0 @@
-function () {
-    return (  );
-}
-
-export default ;

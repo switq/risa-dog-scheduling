@@ -13,6 +13,11 @@ import IncluirClienteContext from "../../contexts/IncluirClienteContext";
 import style from './IncluirClienteModal.module.scss';
 import { BackFowardWrapper, StepContainer } from '../common/Step'
 import { v4 as uuid4 } from 'uuid';
+import { incluirCliente, alterarCliente } from "../../connection/ManterClienteAnimais";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { toastSuccessStyle } from "../../styles/ToastsStyles";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const incluirClienteStyle = {
@@ -34,27 +39,48 @@ const incluirClienteStyle = {
 function IncluirClienteModal({
     dados =
     {
-        id: '',
-        nome: "AAA",
-        email: "",
-        cpf: "",
-        dtNasc: "",
-        tel1: "",
-        tel2: "",
-        cep: "",
-        logradouro: "",
-        numeroRes: "",
-        bairro: "",
-        localidade: "",
-        uf: "",
+        id: 11,
+        nome: "Teste Boy",
+        email: "test@test",
+        cpf: "12345678901",
+        dtNasc: "2023-11-02",
+        tel1: "11233334444",
+        tel2: "1133334444",
+        cep: "05699-430",
+        logradouro: "Rua das Tralala",
+        numeroRes: 12,
+        bairro: "Campo Sujo",
+        localidade: "São Paulo",
+        uf: "SP",
+        complemento: 'casa',
         animais: [],
     }, ...props }) {
 
     const [cliente, setCliente] = useState(dados);
-
-    const handleSubmit = (values, { setSubmitting }) => {
+    
+    async function handleSubmit(values, { setSubmitting }) {
         setStep(0);
         console.log(values);
+        
+        try {
+            let response;
+
+            if (values.id == '') {
+                console.log('post')
+                response = await incluirCliente(values);
+            }
+            else {
+                console.log('put')
+                response = await alterarCliente(values);
+            } 
+
+            toast.success("Deu");
+            console.log(response);
+            
+        } catch (error) {
+            console.log(error.request.response);
+            console.log('n deu')
+        }        
     }
 
     let [step, setStep] = useState(0)
@@ -70,6 +96,7 @@ function IncluirClienteModal({
                 return <IncluirAnimais cliente={cliente} setCliente={setCliente} />;
             default:
                 return <IncluirCliente />;
+                
         }
     }
 

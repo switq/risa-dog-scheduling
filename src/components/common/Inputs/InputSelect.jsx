@@ -13,7 +13,7 @@ export const InputSelect = ({ name, label, options, required, ...props }) => {
             </Label>
             <Field as={FieldStyled} name={name} autoComplete="off" {...props}>
                 {options.map((opt, index) => (
-                    <option value={opt.value}>{opt.label}</option>
+                    <option key={index} value={opt.value}>{opt.label}</option>
                 ))}
             </Field>
             <ErrorMessage name={name} component={ErrorStyled} />
