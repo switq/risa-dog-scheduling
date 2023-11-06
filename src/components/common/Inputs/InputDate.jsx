@@ -3,14 +3,14 @@ import React from "react";
 
 const { InputWrapper, Label, RequiredLabel, FieldStyled, ErrorStyled } = styles();
 
-export const InputSearch = ({ name, value, onChange, label, required, ...props }) => {
+export const InputDate = ({ name, value, onChange, label, required, ...props }) => {
     return (
         <InputWrapper>
             <Label>
                 {label || name}
                 {required && <RequiredLabel>*</RequiredLabel>}
             </Label>
-            <FieldStyled value={value} onChange={onChange} name={name} type="search" autoComplete="off" {...props} />
+            <FieldStyled value={value} onChange={onChange} name={name} type="date" autoComplete="off" {...props} />
         </InputWrapper>
     )
 };
@@ -21,6 +21,7 @@ function styles() {
     flex-direction: column;
     gap: .3em;
     flex-grow: ${props => props.flexG ? props.flexG : "1"};
+    max-width: 8rem;
 `;
 
     const FieldStyled = styled.input`

@@ -4,43 +4,59 @@ import { useState } from "react";
 import style from "./NovaSolicitacao.module.scss";
 import SearchList from "./SearchList";
 import IncluirAnimais from "../../IncluirClienteModal/IncluirAnimais";
+import IncluirClienteModal from "../../IncluirClienteModal";
+import { getClientesFiltrados } from "../../../connection/ManterClienteAnimais";
 
-const clientes = [
-    { nome: "Guilherme Rodrigo", cpf: '00000000007', animais: [
-        {id: 1, nome: "Lolla", especie: 'Cão'},
-        {id: 2, nome: "Mel", especie: "Cão"},
-    ], },
-    { nome: "Luan Limão", cpf: '00000000003' },
-    { nome: "Luana Beluga", cpf: '00000000001' },
-    { nome: "Wanderlay Mosquinha", cpf: '00000000002' },
-    { nome: "Diogo Suado", cpf: '00000000009' },
-]
 
 function NovaSolicitacao() {
-    
+    const [incluirClienteIsOpen, setIncluirClienteIsOpen] = useState(false);
+    const openIncluirCliente = () => {
+        setIncluirClienteIsOpen(true);
+    }
+    const closeIncluirCliente = () => {
+        setIncluirClienteIsOpen(false);
+    }
+
     const [busca, setBusca] = useState('');
-    const users = clientes.filter(user => user.nome.toLowerCase().includes(busca.toLowerCase()))
+    const [listaClientes, setListaClientes] = useState([]);
+    const clientesFiltrados = listaClientes.filter(user => user.nome.toLowerCase().includes(busca.toLowerCase()));
 
-    const [cliente, setCliente] = useState(clientes[0]);
-
-    const [animalSelecionado, setAnimalSelecionado] = useState({});
+    async function requisitarClientes(textoBusca) {
+        const response = await getClientesFiltrados(textoBusca);
+        setListaClientes(response);
+    }
 
     return (
         <div>
+            <IncluirClienteModal 
+                isOpen={incluirClienteIsOpen}
+                closeModal={closeIncluirCliente}
+            />
+
             <div className={style.busca}>
                 <InputSearch
                     value={busca}
                     label={"Consultar cliente"}
                     onChange={e => {
-                        setBusca(e.target.value);
+                        const textoBusca = e.target.value;
+                        setBusca(textoBusca);
+                        if (textoBusca.length > 1) {
+                            requisitarClientes(textoBusca);
+                        } else {
+                            setListaClientes([]);
+                        }
                     }}
                 />
-                <span className={style.addPerson}><PersonAdd /></span>
+                <span 
+                    className={style.addPerson}
+                    onClick={openIncluirCliente}
+                ><PersonAdd /></span>
             </div>
 
             <hr className={style.divisao}/>
 
-            <SearchList users={users} setBusca={setBusca}/>
+            <SearchList users={clientesFiltrados} setBusca={setBusca}/>
+
             {/* <IncluirAnimais
                 selecionado={animalSelecionado}
                 setSelecionado={setAnimalSelecionado} 

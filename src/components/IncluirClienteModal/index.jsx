@@ -16,7 +16,6 @@ import { v4 as uuid4 } from 'uuid';
 import { incluirCliente, alterarCliente } from "../../connection/ManterClienteAnimais";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { toastSuccessStyle } from "../../styles/ToastsStyles";
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -39,7 +38,7 @@ const incluirClienteStyle = {
 function IncluirClienteModal({
     dados =
     {
-        id: 11,
+        id: '',
         nome: "Teste Boy",
         email: "test@test",
         cpf: "12345678901",
@@ -54,7 +53,7 @@ function IncluirClienteModal({
         uf: "SP",
         complemento: 'casa',
         animais: [],
-    }, ...props }) {
+    }, closeModal, ...props }) {
 
     const [cliente, setCliente] = useState(dados);
     
@@ -133,6 +132,7 @@ function IncluirClienteModal({
         <IncluirClienteContext.Provider value={{ cliente, setCliente }}>
             <Modal
                 {...props}
+                onRequestClose={closeModal}
                 style={incluirClienteStyle}
             >
                 <Formik
@@ -167,7 +167,7 @@ function IncluirClienteModal({
 
                             <BackFowardWrapper>
                                 <Button
-                                    onClick={_ => step !== 0 ? setStep(step - 1) : ""}
+                                    onClick={_ => step !== 0 ? setStep(step - 1) : closeModal()}
                                     type={"button"}
                                 >
                                     {step !== 0 ? "Voltar" : "Fechar"}

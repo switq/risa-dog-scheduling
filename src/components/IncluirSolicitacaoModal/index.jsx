@@ -26,8 +26,8 @@ const incluirSolicitacaoStyle = {
   },
 }
 
-function IncluirSolicitacaoModal() {
-  const [step, setStep] = useState(1);
+function IncluirSolicitacaoModal({ dados, closeModal, ...props}) {
+  const [step, setStep] = useState(0);
   const Steps = ["Nova Solicitação", "Agendamento", "Pagamento"];
 
   const getCompStep = () => {
@@ -45,13 +45,14 @@ function IncluirSolicitacaoModal() {
 
   return (
     <Modal
-      // isOpen={true}
+      onRequestClose={closeModal}
       style={incluirSolicitacaoStyle}
+      {...props}
     >
       
       <div className={style.container}>
         <div>
-          <ModalTittle>Nova Solicitação</ModalTittle>
+          <ModalTittle>{Steps[step]}</ModalTittle>
 
           <StepContainer>
             {Steps.map((item, index) => (
@@ -60,8 +61,8 @@ function IncluirSolicitacaoModal() {
                 <Step
                   key={index}
                   $ativo={index === step}
-                  onClick={_ => setStep(index)}
                   style={{width: '14rem'}}
+                  onClick={_ => setStep(index)}
                 >
                   {item}
                 </Step>
@@ -74,7 +75,7 @@ function IncluirSolicitacaoModal() {
 
         <BackFowardWrapper>
           <Button
-            onClick={_ => step !== 0 ? setStep(step - 1) : ""}
+            onClick={_ => step !== 0 ? setStep(step - 1) : closeModal()}
             type={"button"}
           >
             {step !== 0 ? "Voltar" : "Fechar"}

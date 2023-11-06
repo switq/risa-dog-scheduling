@@ -1,12 +1,12 @@
 .cardContainer {
     display: flex;
+    flex-direction: column;
     background-color: var(--magenta);
-    width: 18rem;
+    width: 20rem;
     justify-content: space-between;
     padding: 1em;
     color: var(--light);
     fill: var(--light);
-    height: 8em;
     border-radius: .5em;
 }
 
@@ -15,9 +15,13 @@
     flex-direction: column;
     justify-content: space-between;
 }
-
-.col2 {
+.row {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+}
+
+.horario {
+    align-self: flex-end;
+    font-size: .8em;
+    height: 2em;
 }

@@ -42,10 +42,10 @@ export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCl
 
 
     const especies = [
-        { value: 'Cachorro', text: 'Cachorro' },
-        { value: 'Gato', text: 'Gato' },
-        { value: 'Ave', text: 'Ave' },
-        { value: 'Cobra', text: 'Cobra' },
+        { value: 'Cachorro', label: 'Cachorro' },
+        { value: 'Gato', label: 'Gato' },
+        { value: 'Ave', label: 'Ave' },
+        { value: 'Cobra', label: 'Cobra' },
     ]
 
     if (id != '') {

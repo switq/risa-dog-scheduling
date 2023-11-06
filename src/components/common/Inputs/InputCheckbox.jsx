@@ -1,22 +1,16 @@
 import styled from "styled-components";
 import React from "react";
-import { Field, ErrorMessage } from "formik";
 
 const { InputWrapper, Label, RequiredLabel, FieldStyled, ErrorStyled } = styles();
 
-export const InputSelect = ({ name, label, options, required, ...props }) => {
+export const InputCheckbox = ({ name, value, onChange, label, required, ...props }) => {
     return (
         <InputWrapper>
+            <FieldStyled value={value} onChange={onChange} name={name} type="checkbox" autoComplete="off" {...props} />
             <Label>
                 {label || name}
                 {required && <RequiredLabel>*</RequiredLabel>}
             </Label>
-            <Field as={FieldStyled} name={name} autoComplete="off" {...props}>
-                {options.map((opt, index) => (
-                    <option value={opt.value}>{opt.label}</option>
-                ))}
-            </Field>
-            <ErrorMessage name={name} component={ErrorStyled} />
         </InputWrapper>
     )
 };
@@ -24,12 +18,11 @@ export const InputSelect = ({ name, label, options, required, ...props }) => {
 function styles() {
     const InputWrapper = styled.div`
     display: flex;
-    flex-direction: column;
     gap: .3em;
-    flex-grow: ${props => props.flexG ? props.flexG : "1"};
+    align-items: center;
 `;
 
-    const FieldStyled = styled.select`
+    const FieldStyled = styled.input`
     border-radius: 0.3rem;
     border: none;
     padding: .5em;
