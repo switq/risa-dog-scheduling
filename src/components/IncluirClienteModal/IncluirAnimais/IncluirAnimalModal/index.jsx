@@ -5,8 +5,6 @@ import { BasicInput } from "../../../common/Inputs/BasicInput";
 import { CRow, CCol } from "../../../common/Containers.style";
 import * as Yup from "yup"
 import { Button } from "../../../common/Button.style";
-import IncluirClienteContext from "../../../../contexts/IncluirClienteContext";
-import { useContext } from "react";
 import { v4 as uuid4 } from 'uuid';
 import style from './IncluirAnimalModal.module.scss';
 import { Trash } from '../../../../assets/icons/trash';
@@ -32,9 +30,9 @@ export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCl
     let initialValues = {
         nome: 'normal',
         rga: '',
-        porte: '',
+        porte: 'P',
         genero: '',
-        especie: '',
+        especie: 'Cachorro',
         raca: '',
         obs: '',
         status: '',

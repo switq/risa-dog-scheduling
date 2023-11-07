@@ -60,6 +60,7 @@ function IncluirClienteModal({
     async function handleSubmit(values, { setSubmitting }) {
         setStep(0);
         console.log(values);
+        console.log(JSON.stringify);
         
         try {
             let response;
@@ -73,12 +74,14 @@ function IncluirClienteModal({
                 response = await alterarCliente(values);
             } 
 
-            toast.success("Deu");
+            toast.success("Cliente incluido com sucesso!");
             console.log(response);
+            closeModal();
             
         } catch (error) {
-            console.log(error.request.response);
-            console.log('n deu')
+            
+            console.log(JSON.parse(error.request.response).error);
+            toast.error(JSON.parse(error.request.response).error);
         }        
     }
 

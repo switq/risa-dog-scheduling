@@ -1,11 +1,11 @@
 import { InputSearch } from "../../common/Inputs/InputSearch";
 import { PersonAdd } from "../../../assets/icons/personAdd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import style from "./NovaSolicitacao.module.scss";
 import SearchList from "./SearchList";
 import IncluirAnimais from "../../IncluirClienteModal/IncluirAnimais";
 import IncluirClienteModal from "../../IncluirClienteModal";
-import { getClientesFiltrados } from "../../../connection/ManterClienteAnimais";
+import { getAnimais, getAnimaisCliente, getClientesFiltrados } from "../../../connection/ManterClienteAnimais";
 
 
 function NovaSolicitacao() {
@@ -19,16 +19,59 @@ function NovaSolicitacao() {
 
     const [busca, setBusca] = useState('');
     const [listaClientes, setListaClientes] = useState([]);
-    const clientesFiltrados = listaClientes.filter(user => user.nome.toLowerCase().includes(busca.toLowerCase()));
+    const [cliente, setCliente] = useState();
+    const [clienteIsSetted, setClienteIsSetted] = useState(0);
+    const [animalSelecionado, setAnimalSelecionado] = useState();
 
-    async function requisitarClientes(textoBusca) {
-        const response = await getClientesFiltrados(textoBusca);
-        setListaClientes(response);
+  
+    function changeClienteSelect() {
+        switch (clienteIsSetted) {
+            case 0:
+                return <SearchList users={listaClientes} setCliente={selecionarCliente} />;
+            case 1:
+                console.log(cliente)
+                return <IncluirAnimais
+                    selecionado={animalSelecionado}
+                    setSelecionado={setAnimalSelecionado}
+                    cliente={cliente}
+                    setCliente={selecionarCliente}
+                />
+
+        }
+    }
+    
+
+    function selecionarCliente(user) {
+        // setClienteIsSetted(1);
+        const idCliente = user.idCliente
+        getAnimaisCliente(idCliente)
+            .then((response) => JSON.parse(response.request.response))
+            .then((json) => {
+                console.log(json);
+            })
+    }
+
+    const handleChange = (value) => {
+        setBusca(value);
+        getClientesFiltrados(value)
+            .then((response) => JSON.parse(response.request.response))
+            .then((json) => {
+                const results = json.filter((user) => {
+                    return (
+                        value &&
+                        user &&
+                        user.nome &&
+                        user.nome.toLowerCase().includes(value.toLowerCase())
+                    );
+                })
+                setListaClientes(results);
+            })
+            .catch((erro) => '')
     }
 
     return (
         <div>
-            <IncluirClienteModal 
+            <IncluirClienteModal
                 isOpen={incluirClienteIsOpen}
                 closeModal={closeIncluirCliente}
             />
@@ -36,33 +79,23 @@ function NovaSolicitacao() {
             <div className={style.busca}>
                 <InputSearch
                     value={busca}
-                    label={"Consultar cliente"}
+                    label={"Consultar cliente (nome ou cpf)"}
                     onChange={e => {
                         const textoBusca = e.target.value;
-                        setBusca(textoBusca);
-                        if (textoBusca.length > 1) {
-                            requisitarClientes(textoBusca);
-                        } else {
-                            setListaClientes([]);
-                        }
+                        handleChange(textoBusca);
                     }}
                 />
-                <span 
+                <span
                     className={style.addPerson}
                     onClick={openIncluirCliente}
                 ><PersonAdd /></span>
             </div>
 
-            <hr className={style.divisao}/>
+            <hr className={style.divisao} />
 
-            <SearchList users={clientesFiltrados} setBusca={setBusca}/>
+            {changeClienteSelect()}
 
-            {/* <IncluirAnimais
-                selecionado={animalSelecionado}
-                setSelecionado={setAnimalSelecionado} 
-                cliente={cliente} 
-                setCliente={setCliente}
-            /> */}
+
         </div>
     );
 }
