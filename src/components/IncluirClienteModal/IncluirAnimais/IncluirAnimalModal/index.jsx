@@ -9,7 +9,9 @@ import { v4 as uuid4 } from 'uuid';
 import style from './IncluirAnimalModal.module.scss';
 import { Trash } from '../../../../assets/icons/trash';
 import { InputSelect } from "../../../common/Inputs/InputSelect";
-import { postAnimal } from "../../../../connection/ManterClienteAnimais";
+import { postAnimal, putClienteAnimais } from "../../../../connection/ManterClienteAnimais";
+import axios from 'axios'
+
 
 const incluirAnimalStyle = {
     content: {
@@ -66,7 +68,7 @@ export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente,
         setCliente(prevCliente => {
             const newCliente = { ...prevCliente };
             console.log(idAnimal)
-            
+
             if (idAnimal != '') {
                 const animalIndex = newCliente.animais.findIndex(animal => animal.idAnimal == idAnimal);
                 newCliente.animais[animalIndex] = { ...newCliente.animais[animalIndex], ...values };
@@ -76,10 +78,18 @@ export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente,
                 newCliente.animais.push({ idAnimal: uuid4(), ...values });
             }
 
-            
+
             return newCliente;
         })
-        
+
+        if(inclusao) {
+            axios.put(`https://risa-dog.onrender.com/agendas/cliente/${cliente.idCliente}`, cliente)
+                .then((res) => console.log(res))
+                .catch((error) => console.log(error))
+        }
+
+
+        console.log(cliente.idCliente)
         console.log(cliente)
         closeModal();
     }

@@ -1,14 +1,17 @@
 import { InputSearch } from "../../common/Inputs/InputSearch";
 import { PersonAdd } from "../../../assets/icons/personAdd";
+import { Close } from "../../../assets/icons/close";
 import { useEffect, useState } from "react";
 import style from "./NovaSolicitacao.module.scss";
 import SearchList from "./SearchList";
 import IncluirAnimais from "../../IncluirClienteModal/IncluirAnimais";
 import IncluirClienteModal from "../../IncluirClienteModal";
-import { getAnimais, getAnimaisCliente, getClientesFiltrados } from "../../../connection/ManterClienteAnimais";
+import { getAnimaisCliente, getClientesFiltrados } from "../../../connection/ManterClienteAnimais";
 
 
-function NovaSolicitacao() {
+
+function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSelecionado, }) {
+    
     const [incluirClienteIsOpen, setIncluirClienteIsOpen] = useState(false);
     const openIncluirCliente = () => {
         setIncluirClienteIsOpen(true);
@@ -19,9 +22,7 @@ function NovaSolicitacao() {
 
     const [busca, setBusca] = useState('');
     const [listaClientes, setListaClientes] = useState([]);
-    const [cliente, setCliente] = useState();
     const [clienteIsSetted, setClienteIsSetted] = useState(0);
-    const [animalSelecionado, setAnimalSelecionado] = useState();
 
     useEffect(() => {
         console.log(animalSelecionado)
@@ -41,7 +42,7 @@ function NovaSolicitacao() {
                     setSelecionado={setAnimalSelecionado}
                     cliente={cliente}
                     setCliente={setCliente}
-                // inclusao={true}
+                    inclusao={true}
                 />
 
         }
@@ -58,7 +59,7 @@ function NovaSolicitacao() {
                 return <span
                     className={style.addPerson}
                     onClick={searchReset}
-                >X</span>
+                ><Close /></span>
         }
     }
 
@@ -68,7 +69,6 @@ function NovaSolicitacao() {
         setAnimalSelecionado('');
         setCliente('');
         setClienteIsSetted(0);
-
     }
 
     function selecionarCliente(user) {

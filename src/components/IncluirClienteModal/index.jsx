@@ -76,6 +76,10 @@ function IncluirClienteModal({
 
             toast.success("Cliente incluido com sucesso!");
             console.log(response);
+            setCliente((prevCliente) => {
+                prevCliente.animais = []
+                return prevCliente;
+            });
             closeModal();
             
         } catch (error) {
@@ -88,12 +92,12 @@ function IncluirClienteModal({
     let [step, setStep] = useState(0)
     const Steps = ["Dados do cliente", "Endereço", "Animais"];
 
-    const getCompStep = _ => {
+    const getCompStep = (values, setFieldValue='') => {
         switch (step) {
             case 0:
                 return <IncluirCliente />;
             case 1:
-                return <IncluirEndereco />;
+                return <IncluirEndereco values={values} setFieldValue={setFieldValue}/>;
             case 2:
                 return <IncluirAnimais cliente={cliente} setCliente={setCliente} />;
             default:
@@ -144,7 +148,7 @@ function IncluirClienteModal({
                     validationSchema={validationSchema}
                     className={style.formik}
                 >
-                    {({ values, isSubimitting }) => (
+                    {({ values, isSubimitting, setFieldValue }) => (
                         <Form key={uuid4} className={style.form}>
 
                             <CCol gap="0">
@@ -165,7 +169,7 @@ function IncluirClienteModal({
                                     ))}
                                 </StepContainer>
 
-                                {getCompStep()}
+                                {getCompStep(values, setFieldValue)}
                             </CCol>
 
                             <BackFowardWrapper>

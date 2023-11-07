@@ -26,20 +26,31 @@ const incluirSolicitacaoStyle = {
   },
 }
 
-function IncluirSolicitacaoModal({ dados, closeModal, ...props}) {
+function IncluirSolicitacaoModal({ dados, closeModal, ...props }) {
   const [step, setStep] = useState(0);
   const Steps = ["Nova Solicitação", "Agendamento", "Pagamento"];
+
+  // States solicitacao
+  const [cliente, setCliente] = useState();
+  const [animalSelecionado, setAnimalSelecionado] = useState();
+
+  function verificarCliente() {
+    return animalSelecionado && cliente;
+  }
 
   const getCompStep = () => {
     switch (step) {
       case 0:
-        return <NovaSolicitacao />;
+        return <NovaSolicitacao
+          cliente={cliente}
+          setCliente={setCliente}
+          animalSelecionado={animalSelecionado}
+          setAnimalSelecionado={setAnimalSelecionado}
+        />;
       case 1:
         return <Agendamento />;
       case 2:
         return <Pagamento />;
-      default:
-        return <NovaSolicitacao />;
     }
   }
 
@@ -49,7 +60,7 @@ function IncluirSolicitacaoModal({ dados, closeModal, ...props}) {
       style={incluirSolicitacaoStyle}
       {...props}
     >
-      
+
       <div className={style.container}>
         <div>
           <ModalTittle>{Steps[step]}</ModalTittle>
@@ -61,7 +72,7 @@ function IncluirSolicitacaoModal({ dados, closeModal, ...props}) {
                 <Step
                   key={index}
                   $ativo={index === step}
-                  style={{width: '14rem'}}
+                  style={{ width: '14rem' }}
                   onClick={_ => setStep(index)}
                 >
                   {item}
@@ -83,11 +94,17 @@ function IncluirSolicitacaoModal({ dados, closeModal, ...props}) {
           <Button
             $roxo
             onClick={(e) => {
-              if (step !== 2) {
+              if (step === 0) {
+                if(verificarCliente()){
+                  setStep(step + 1);
+                }
+                e.target.type = "button";
+              }
+              else if (step == 1) {
                 setStep(step + 1);
                 e.target.type = "button";
               }
-              else {
+              else if (step === 2) {
                 e.target.type = "submit";
                 setStep(0);
               }

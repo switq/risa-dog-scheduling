@@ -3,6 +3,7 @@ import style from './Horarios.module.scss'
 import { ModalTittle } from '../../../common/Modal.style';
 import HoraCard from './HoraCard';
 import { Button } from '../../../common/Button.style';
+import { useState } from 'react';
 
 const horariosStyle = {
     content: {
@@ -20,17 +21,36 @@ const horariosStyle = {
     },
 }
 
+// Criação dos horaios
 let horarios = [];
-
 for (let i = 9; i < 20; i++) {
     for (let j = 0; j < 60; j += 15) {
         horarios.push({ hora: `${i}:${j === 0 ? `0${j}` : j}` })
     }
 }
 
-console.log(horarios)
+// Molde de agenda vazia
+const agendaMolde = []
+for(let i = 0; i < 44; i++) {
+    agendaMolde.push(0);
+}
+
+// Teste
+const agendaFunc = [...agendaMolde]
+agendaFunc[12] = 1;
+agendaFunc[13] = 1;
+
 
 function Horarios() {
+    const [horariosSelecionados, setHorariosSelecionados] = useState([...agendaMolde]);
+
+    function toggleHorario(index) {
+        if (agendaFunc[index]) return;
+        const newAgenda = [...horariosSelecionados];
+        newAgenda[index] = newAgenda[index] ? 0 : 1;
+        setHorariosSelecionados(newAgenda);
+    }
+    
     return (
         <Modal
             isOpen={true}
@@ -42,12 +62,22 @@ function Horarios() {
                     <div className={style.horasContainer}>
                         {
                             horarios.map((hor, index) => (
-                                <HoraCard hora={hor.hora} />
+                                <HoraCard
+                                    hora={hor.hora}
+                                    ativo={horariosSelecionados[index]}
+                                    desativado={agendaFunc[index]}
+                                    onClick={() => toggleHorario(index)}
+                                />
                             ))
                         }
                     </div>
                 </div>
-                <Button $roxo>Confirmar</Button>
+                <Button 
+                    $roxo
+                    onClick={() => console.log(horariosSelecionados)}
+                >
+                    Confirmar
+                </Button>
             </div>
         </Modal>
     );

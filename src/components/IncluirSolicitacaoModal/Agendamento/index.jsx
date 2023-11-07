@@ -10,7 +10,7 @@ function Agendamento() {
             <hr />
             <Tabela></Tabela>
             <SelecionarServicos />
-            {/* <Horarios /> */}
+            <Horarios />
         </div>
     );
 }

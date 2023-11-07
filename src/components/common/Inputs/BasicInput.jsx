@@ -1,17 +1,35 @@
 import styled from "styled-components";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Field, ErrorMessage } from "formik";
 
 const { InputWrapper, Label, RequiredLabel, FieldStyled, ErrorStyled } = styles();
 
-export const BasicInput = ({ name, type = "", label, required, ...props}) => {
+
+export const BasicInput = ({ name, type = "", label, required, values=false, ...props}) => {
+    
+    const [Conteudo, setConteudo] = useState('');
+
+    function atualizaConteudo() {
+        if (values) setConteudo(values[name]);
+        else setConteudo('');
+    }
+
+    useEffect(() => {
+        atualizaConteudo()
+    }, [values])
+
+
+
     return (
         <InputWrapper>
             <Label>
                 {label || name}
                 {required && <RequiredLabel>*</RequiredLabel>}
             </Label>
-            <Field as={FieldStyled} name={name} type={type} autoComplete="off" {...props} />
+
+            <Field as={FieldStyled} style={{ display: !values ? 'inlineBlock' : 'none' }} name={name} type={type} autoComplete="off" {...props} />
+            <FieldStyled value={Conteudo} style={{ display: values ? 'inlineBlock' : 'none', color: '#777' }} />
+            
             <ErrorMessage name={name} component={ErrorStyled}/>
         </InputWrapper>
     )

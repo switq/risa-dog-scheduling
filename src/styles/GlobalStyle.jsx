@@ -16,6 +16,8 @@ export const GlobalStyle = createGlobalStyle`
         --gray: #ccc;
         --verde: #74B599;
         --vermelho: #9E3232;
+        --gray: #D8D8D8;
+        --gray02: #CCC;
     }
 
     *{
@@ -29,4 +31,9 @@ export const GlobalStyle = createGlobalStyle`
         font-weigth: 500;
         font-size: 16px;
     }
+
+    input[type="search"]::-webkit-search-decoration,
+    input[type="search"]::-webkit-search-cancel-button,
+    input[type="search"]::-webkit-search-results-button,
+    input[type="search"]::-webkit-search-results-decoration { display: none; }
 `
