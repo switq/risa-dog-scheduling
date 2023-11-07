@@ -9,6 +9,7 @@ import { v4 as uuid4 } from 'uuid';
 import style from './IncluirAnimalModal.module.scss';
 import { Trash } from '../../../../assets/icons/trash';
 import { InputSelect } from "../../../common/Inputs/InputSelect";
+import { postAnimal } from "../../../../connection/ManterClienteAnimais";
 
 const incluirAnimalStyle = {
     content: {
@@ -25,7 +26,7 @@ const incluirAnimalStyle = {
     },
 }
 
-export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCliente, ...props }) {
+export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCliente, inclusao = false, ...props }) {
 
     let initialValues = {
         nome: 'normal',
@@ -37,7 +38,6 @@ export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCl
         obs: '',
         status: '',
     };
-
 
     const especies = [
         { value: 'Cachorro', label: 'Cachorro' },
@@ -62,7 +62,8 @@ export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCl
     })
 
     const handleSubmit = (values, { setSubmitting }) => {
-        closeModal();
+        console.log('manter animais submit')
+        console.log(id)
 
         setCliente(prevCliente => {
             const newCliente = { ...prevCliente };
@@ -74,8 +75,12 @@ export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCl
                 newCliente.animais.push({ id: uuid4(), ...values });
             }
 
+            
             return newCliente;
         })
+        
+        console.log(cliente)
+        closeModal();
     }
 
     const deletarAnimal = () => {
@@ -105,11 +110,11 @@ export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCl
                             <CCol>
                                 <CRow>
                                     <BasicInput name="nome" required />
-                                    <InputSelect name="genero" label="Gênero" required options={[{ value: 'F', label: 'Fêmea' }, { value: 'M', label: 'Macho' },]}/>
+                                    <InputSelect name="genero" label="Gênero" required options={[{ value: 'F', label: 'Fêmea' }, { value: 'M', label: 'Macho' },]} />
                                 </CRow>
                                 <CRow>
                                     <BasicInput name="rga" label={"RGA"} />
-                                    <InputSelect name="porte" required options={[{ value: 'P', label: 'Pequeno' }, { value: 'M', label: 'Médio' }, { value: 'G', label: 'Grande' },]}/>
+                                    <InputSelect name="porte" required options={[{ value: 'P', label: 'Pequeno' }, { value: 'M', label: 'Médio' }, { value: 'G', label: 'Grande' },]} />
                                 </CRow>
                                 <CRow>
                                     <InputSelect name="especie" label={"Espécie"} options={especies} required />

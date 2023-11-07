@@ -13,6 +13,10 @@ export function getClientesFiltrados(textoBusca) {
 }
 
 export function getAnimaisCliente(idCliente) {
-    return axios.get(`https://risa-dog.onrender.com/agendas/cliente/animais/${idCliente}`);
-    
+    return axios.get(`https://risa-dog.onrender.com/agendas/cliente/animais/${idCliente}`); 
+}
+
+
+export function postAnimal(idCliente, values) {
+    return axios.post(`https://risa-dog.onrender.com/agendas/nova-solicitacao/${idCliente}/animais`, values);
 }

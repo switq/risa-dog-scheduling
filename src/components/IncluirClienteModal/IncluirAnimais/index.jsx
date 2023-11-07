@@ -5,7 +5,7 @@ import IncluirClienteContext from "../../../contexts/IncluirClienteContext";
 import style from './IncluirAnimais.module.scss';
 
 
-function IncluirAnimais({ cliente, setCliente, selecionado='', setSelecionado='', ...props}) {
+function IncluirAnimais({ cliente, setCliente, selecionado='', setSelecionado='', inclusao=false, ...props}) {
 
     const [isOpenAnimal, setIsOpenAnimal] = useState(false);
     const modalToggle = (id='') => {
@@ -38,7 +38,7 @@ function IncluirAnimais({ cliente, setCliente, selecionado='', setSelecionado=''
                 <AddAnimal toggleModal={modalToggle} />
             </div>
 
-            <IncluirAnimalModal cliente={cliente} setCliente={setCliente} id={activeId} closeModal={modalToggle} isOpen={isOpenAnimal} onRequestClose={modalToggle} />
+            <IncluirAnimalModal inclusao={inclusao} cliente={cliente} setCliente={setCliente} id={activeId} closeModal={modalToggle} isOpen={isOpenAnimal} onRequestClose={modalToggle} />
         </div>
     )
 }

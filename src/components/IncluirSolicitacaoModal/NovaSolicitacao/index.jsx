@@ -23,7 +23,7 @@ function NovaSolicitacao() {
     const [clienteIsSetted, setClienteIsSetted] = useState(0);
     const [animalSelecionado, setAnimalSelecionado] = useState();
 
-  
+
     function changeClienteSelect() {
         switch (clienteIsSetted) {
             case 0:
@@ -35,20 +35,24 @@ function NovaSolicitacao() {
                     setSelecionado={setAnimalSelecionado}
                     cliente={cliente}
                     setCliente={selecionarCliente}
+                    inclusao={true}
                 />
 
         }
     }
-    
+
 
     function selecionarCliente(user) {
-        // setClienteIsSetted(1);
-        const idCliente = user.idCliente
+        const idCliente = user.idCliente;
         getAnimaisCliente(idCliente)
             .then((response) => JSON.parse(response.request.response))
             .then((json) => {
-                console.log(json);
+                const clienteNovo = { ...user, animais: json };
+                console.log(clienteNovo);
+                setCliente(clienteNovo)
+                setClienteIsSetted(1);
             })
+            .catch((erro) => console.log(erro))
     }
 
     const handleChange = (value) => {
@@ -57,12 +61,21 @@ function NovaSolicitacao() {
             .then((response) => JSON.parse(response.request.response))
             .then((json) => {
                 const results = json.filter((user) => {
-                    return (
-                        value &&
-                        user &&
-                        user.nome &&
-                        user.nome.toLowerCase().includes(value.toLowerCase())
-                    );
+                    if (isNaN(busca)) {
+                        return (
+                            value &&
+                            user &&
+                            user.nome &&
+                            user.nome.toLowerCase().includes(value.toLowerCase())
+                        )
+                    } else {
+                        return (
+                            value &&
+                            user &&
+                            user.cpf &&
+                            user.cpf.includes(value)
+                        )
+                    };
                 })
                 setListaClientes(results);
             })
