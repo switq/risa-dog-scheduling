@@ -26,7 +26,7 @@ const incluirAnimalStyle = {
     },
 }
 
-export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCliente, inclusao = false, ...props }) {
+export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente, setCliente, inclusao = false, ...props }) {
 
     let initialValues = {
         nome: 'normal',
@@ -46,8 +46,8 @@ export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCl
         { value: 'Cobra', label: 'Cobra' },
     ]
 
-    if (id != '') {
-        const animal = cliente.animais.find(animal => animal.id == id);
+    if (idAnimal != '') {
+        const animal = cliente.animais.find(animal => animal.idAnimal == idAnimal);
         initialValues = { ...initialValues, ...animal };
     }
 
@@ -62,17 +62,18 @@ export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCl
     })
 
     const handleSubmit = (values, { setSubmitting }) => {
-        console.log('manter animais submit')
-        console.log(id)
 
         setCliente(prevCliente => {
             const newCliente = { ...prevCliente };
-
-            if (id != '') {
-                const animalIndex = newCliente.animais.findIndex(animal => animal.id == id);
+            console.log(idAnimal)
+            
+            if (idAnimal != '') {
+                const animalIndex = newCliente.animais.findIndex(animal => animal.idAnimal == idAnimal);
                 newCliente.animais[animalIndex] = { ...newCliente.animais[animalIndex], ...values };
+                console.log('handleSubmit')
+                console.log(newCliente)
             } else {
-                newCliente.animais.push({ id: uuid4(), ...values });
+                newCliente.animais.push({ idAnimal: uuid4(), ...values });
             }
 
             
@@ -84,8 +85,8 @@ export default function IncluirAnimalModal({ id = '', closeModal, cliente, setCl
     }
 
     const deletarAnimal = () => {
-        if (id != '') {
-            const animalIndex = cliente.animais.findIndex(animal => animal.id == id);
+        if (idAnimal != '') {
+            const animalIndex = cliente.animais.findIndex(animal => animal.idAnimal == idAnimal);
             setCliente(prevCliente => {
                 const newCliente = { ...prevCliente };
                 newCliente.animais.splice(animalIndex, 1);

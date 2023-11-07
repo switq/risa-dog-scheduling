@@ -16,15 +16,16 @@ const AnimalCardContainer = styled(CRowStyle)`
     box-shadow: 1.5px 3px 4px #2226;
 `
 
-export default function AnimalCard({ id, ativo, toggleModal, cliente, setSelecionado='', ...props }) {
+export default function AnimalCard({ idAnimal, ativo, toggleModal, cliente, setSelecionado='', ...props }) {
 
-    const animal = cliente.animais.find(animal => animal.id === id);
+    const animal = cliente.animais.find(animal => animal.idAnimal === idAnimal);
 
     const editAnimal = () => {
-        toggleModal(id)
+        toggleModal(idAnimal)
     }
 
     function selecionarAnimal() {
+        console.log('selecionar animal')
         if (setSelecionado === '') return
         setSelecionado(animal);
     }

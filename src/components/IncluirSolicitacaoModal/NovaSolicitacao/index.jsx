@@ -23,36 +23,67 @@ function NovaSolicitacao() {
     const [clienteIsSetted, setClienteIsSetted] = useState(0);
     const [animalSelecionado, setAnimalSelecionado] = useState();
 
+    useEffect(() => {
+        console.log(animalSelecionado)
+    }, [animalSelecionado])
 
-    function changeClienteSelect() {
+    function changeCampoCliente() {
         switch (clienteIsSetted) {
             case 0:
-                return <SearchList users={listaClientes} setCliente={selecionarCliente} />;
+                return <SearchList
+                    users={listaClientes}
+                    setCliente={selecionarCliente}
+                />;
             case 1:
                 console.log(cliente)
                 return <IncluirAnimais
                     selecionado={animalSelecionado}
                     setSelecionado={setAnimalSelecionado}
                     cliente={cliente}
-                    setCliente={selecionarCliente}
-                    inclusao={true}
+                    setCliente={setCliente}
+                // inclusao={true}
                 />
 
         }
     }
 
+    function changeIncluirReset() {
+        switch (clienteIsSetted) {
+            case 0:
+                return <span
+                    className={style.addPerson}
+                    onClick={openIncluirCliente}
+                ><PersonAdd /></span>
+            case 1:
+                return <span
+                    className={style.addPerson}
+                    onClick={searchReset}
+                >X</span>
+        }
+    }
+
+    function searchReset() {
+        setBusca('');
+        setListaClientes([]);
+        setAnimalSelecionado('');
+        setCliente('');
+        setClienteIsSetted(0);
+
+    }
 
     function selecionarCliente(user) {
         const idCliente = user.idCliente;
+        setBusca(user.nome)
         getAnimaisCliente(idCliente)
             .then((response) => JSON.parse(response.request.response))
             .then((json) => {
-                const clienteNovo = { ...user, animais: json };
+                const clienteNovo = { ...user, animais: [...json] };
                 console.log(clienteNovo);
                 setCliente(clienteNovo)
                 setClienteIsSetted(1);
             })
             .catch((erro) => console.log(erro))
+
     }
 
     const handleChange = (value) => {
@@ -98,16 +129,14 @@ function NovaSolicitacao() {
                         handleChange(textoBusca);
                     }}
                 />
-                <span
-                    className={style.addPerson}
-                    onClick={openIncluirCliente}
-                ><PersonAdd /></span>
+
+                {changeIncluirReset()}
+
             </div>
 
             <hr className={style.divisao} />
 
-            {changeClienteSelect()}
-
+            {changeCampoCliente()}
 
         </div>
     );

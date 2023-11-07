@@ -8,8 +8,9 @@ import style from './IncluirAnimais.module.scss';
 function IncluirAnimais({ cliente, setCliente, selecionado='', setSelecionado='', inclusao=false, ...props}) {
 
     const [isOpenAnimal, setIsOpenAnimal] = useState(false);
-    const modalToggle = (id='') => {
-        if ( id != '') setActiveId(id);
+
+    const modalToggle = (idAnimal ='') => {
+        if (idAnimal != '') setActiveId(idAnimal);
         else setActiveId('');
         setIsOpenAnimal(!isOpenAnimal);
     };
@@ -27,10 +28,10 @@ function IncluirAnimais({ cliente, setCliente, selecionado='', setSelecionado=''
                     return (
                         <AnimalCard
                             setSelecionado={setSelecionado}
-                            ativo={selecionado.id === animal.id || isAtivo}
+                            ativo={selecionado.idAnimal === animal.idAnimal || isAtivo}
                             cliente={cliente} 
-                            key={animal.id} 
-                            id={animal.id} 
+                            key={animal.idAnimal} 
+                            idAnimal={animal.idAnimal} 
                             toggleModal={modalToggle}
                         />
                     )
@@ -38,7 +39,15 @@ function IncluirAnimais({ cliente, setCliente, selecionado='', setSelecionado=''
                 <AddAnimal toggleModal={modalToggle} />
             </div>
 
-            <IncluirAnimalModal inclusao={inclusao} cliente={cliente} setCliente={setCliente} id={activeId} closeModal={modalToggle} isOpen={isOpenAnimal} onRequestClose={modalToggle} />
+            <IncluirAnimalModal 
+                inclusao={inclusao} 
+                cliente={cliente} 
+                setCliente={setCliente} 
+                idAnimal={activeId} 
+                closeModal={modalToggle} 
+                isOpen={isOpenAnimal} 
+                onRequestClose={modalToggle} 
+            />
         </div>
     )
 }
