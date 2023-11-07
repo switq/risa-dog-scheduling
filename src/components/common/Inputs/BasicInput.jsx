@@ -28,7 +28,7 @@ export const BasicInput = ({ name, type = "", label, required, values=false, ...
             </Label>
 
             <Field as={FieldStyled} style={{ display: !values ? 'inlineBlock' : 'none' }} name={name} type={type} autoComplete="off" {...props} />
-            <FieldStyled value={Conteudo} style={{ display: values ? 'inlineBlock' : 'none', color: '#777' }} />
+            <FieldStyled readOnly value={Conteudo} style={{ display: values ? 'inlineBlock' : 'none', color: '#777' }} />
             
             <ErrorMessage name={name} component={ErrorStyled}/>
         </InputWrapper>

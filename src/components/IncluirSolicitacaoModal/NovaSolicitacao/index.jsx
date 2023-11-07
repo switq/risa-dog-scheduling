@@ -1,5 +1,6 @@
 import { InputSearch } from "../../common/Inputs/InputSearch";
 import { PersonAdd } from "../../../assets/icons/personAdd";
+import { PersonEdit } from "../../../assets/icons/personEdit";
 import { Close } from "../../../assets/icons/close";
 import { useEffect, useState } from "react";
 import style from "./NovaSolicitacao.module.scss";
@@ -9,9 +10,10 @@ import IncluirClienteModal from "../../IncluirClienteModal";
 import { getAnimaisCliente, getClientesFiltrados } from "../../../connection/ManterClienteAnimais";
 
 
+let clienteAtivo;
 
 function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSelecionado, }) {
-    
+
     const [incluirClienteIsOpen, setIncluirClienteIsOpen] = useState(false);
     const openIncluirCliente = () => {
         setIncluirClienteIsOpen(true);
@@ -23,10 +25,6 @@ function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSele
     const [busca, setBusca] = useState('');
     const [listaClientes, setListaClientes] = useState([]);
     const [clienteIsSetted, setClienteIsSetted] = useState(0);
-
-    useEffect(() => {
-        console.log(animalSelecionado)
-    }, [animalSelecionado])
 
     function changeCampoCliente() {
         switch (clienteIsSetted) {
@@ -54,12 +52,26 @@ function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSele
                 return <span
                     className={style.addPerson}
                     onClick={openIncluirCliente}
-                ><PersonAdd /></span>
+                >
+                    <PersonAdd />
+                </span>
             case 1:
-                return <span
-                    className={style.addPerson}
-                    onClick={searchReset}
-                ><Close /></span>
+                return (
+                    <>
+                        <span
+                            className={style.addPerson}
+                            onClick={searchReset}
+                        >
+                            <Close />
+                        </span>
+                        <span
+                            className={style.addPerson}
+                            onClick={openIncluirCliente}
+                        >
+                            <PersonEdit />
+                        </span>
+                    </>
+                )
         }
     }
 
@@ -73,17 +85,20 @@ function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSele
 
     function selecionarCliente(user) {
         const idCliente = user.idCliente;
+
         setBusca(user.nome)
         getAnimaisCliente(idCliente)
             .then((response) => JSON.parse(response.request.response))
             .then((json) => {
                 const clienteNovo = { ...user, animais: [...json] };
-                console.log(clienteNovo);
                 setCliente(clienteNovo)
                 setClienteIsSetted(1);
             })
             .catch((erro) => console.log(erro))
 
+        console.log('CLIENTE SELECT')
+        console.log(cliente);
+        clienteAtivo = { ...cliente }
     }
 
     const handleChange = (value) => {
@@ -115,9 +130,31 @@ function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSele
 
     return (
         <div>
+
             <IncluirClienteModal
                 isOpen={incluirClienteIsOpen}
                 closeModal={closeIncluirCliente}
+                dados={
+                    clienteIsSetted === 1 ?
+                        { ...cliente } :
+                        {
+                            idCliente: '',
+                            nome: "Teste ghjhgjgh",
+                            email: "test@test",
+                            cpf: "12345678901",
+                            dtNasc: "2023-11-02",
+                            tel1: "11233334444",
+                            tel2: "1133334444",
+                            cep: "05699-430",
+                            logradouro: "Rua das Tralala",
+                            numeroRes: 12,
+                            bairro: "Campo Sujo",
+                            localidade: "São Paulo",
+                            uf: "SP",
+                            complemento: 'casa',
+                            animais: [],
+                        }
+                }
             />
 
             <div className={style.busca}>

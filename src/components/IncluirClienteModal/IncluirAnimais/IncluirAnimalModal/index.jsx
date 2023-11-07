@@ -34,7 +34,7 @@ export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente,
         nome: 'normal',
         rga: '',
         porte: 'P',
-        genero: '',
+        genero: 'F',
         especie: 'Cachorro',
         raca: '',
         obs: '',
@@ -81,7 +81,9 @@ export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente,
 
             return newCliente;
         })
-
+        
+        console.log(cliente.idCliente)
+        
         if(inclusao) {
             axios.put(`https://risa-dog.onrender.com/agendas/cliente/${cliente.idCliente}`, cliente)
                 .then((res) => console.log(res))
@@ -89,8 +91,6 @@ export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente,
         }
 
 
-        console.log(cliente.idCliente)
-        console.log(cliente)
         closeModal();
     }
 

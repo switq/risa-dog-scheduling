@@ -34,6 +34,13 @@ function IncluirSolicitacaoModal({ dados, closeModal, ...props }) {
   const [cliente, setCliente] = useState();
   const [animalSelecionado, setAnimalSelecionado] = useState();
 
+  const [solicitacao, setSolicitacao] = useState();
+
+  const [colaboradores, setColaboradores] = useState();
+
+  const servicos = [];
+
+
   function verificarCliente() {
     return animalSelecionado && cliente;
   }

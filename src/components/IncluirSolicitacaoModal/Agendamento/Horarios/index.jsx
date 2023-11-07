@@ -41,7 +41,7 @@ agendaFunc[12] = 1;
 agendaFunc[13] = 1;
 
 
-function Horarios() {
+function Horarios({colaborador}) {
     const [horariosSelecionados, setHorariosSelecionados] = useState([...agendaMolde]);
 
     function toggleHorario(index) {

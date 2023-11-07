@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../common/Button.style";
 import { Step, Foward } from "../common/Step";
 import IncluirCliente from "./IncluirCliente";
@@ -9,7 +9,6 @@ import * as Yup from "yup"
 import { CCol } from "../common/Containers.style";
 import Modal from "react-modal";
 import { ModalTittle } from "../common/Modal.style";
-import IncluirClienteContext from "../../contexts/IncluirClienteContext";
 import style from './IncluirClienteModal.module.scss';
 import { BackFowardWrapper, StepContainer } from '../common/Step'
 import { v4 as uuid4 } from 'uuid';
@@ -17,6 +16,7 @@ import { incluirCliente, alterarCliente } from "../../connection/ManterClienteAn
 import axios from "axios";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { putClienteAnimais } from "../../connection/ManterClienteAnimais";
 
 
 const incluirClienteStyle = {
@@ -36,77 +36,67 @@ const incluirClienteStyle = {
 }
 
 function IncluirClienteModal({
-    dados =
-    {
-        id: '',
-        nome: "Teste Boy",
-        email: "test@test",
-        cpf: "12345678901",
-        dtNasc: "2023-11-02",
-        tel1: "11233334444",
-        tel2: "1133334444",
-        cep: "05699-430",
-        logradouro: "Rua das Tralala",
-        numeroRes: 12,
-        bairro: "Campo Sujo",
-        localidade: "São Paulo",
-        uf: "SP",
-        complemento: 'casa',
-        animais: [],
-    }, closeModal, ...props }) {
+    dados, closeModal, isOpen, ...props }) {
 
-    const [cliente, setCliente] = useState(dados);
-    
+    const [cliente, setCliente] = useState();
+
+    useEffect(() => {
+        setCliente(dados);
+    }, [dados])
+
+
     async function handleSubmit(values, { setSubmitting }) {
         setStep(0);
         console.log(values);
         console.log(JSON.stringify);
-        
+
         try {
             let response;
 
-            if (values.id == '') {
+            if (values.idCliente == '') {
                 console.log('post')
                 response = await incluirCliente(values);
             }
             else {
                 console.log('put')
-                response = await alterarCliente(values);
-            } 
+                response = await putClienteAnimais(values.idCliente, values);
+            }
 
-            toast.success("Cliente incluido com sucesso!");
+            toast.success(response.data.message);
             console.log(response);
             setCliente((prevCliente) => {
                 prevCliente.animais = []
                 return prevCliente;
             });
             closeModal();
-            
+
         } catch (error) {
-            
+
             console.log(JSON.parse(error.request.response).error);
             toast.error(JSON.parse(error.request.response).error);
-        }        
+        }
     }
 
     let [step, setStep] = useState(0)
     const Steps = ["Dados do cliente", "Endereço", "Animais"];
 
-    const getCompStep = (values, setFieldValue='') => {
+    const getCompStep = (values, setFieldValue = '') => {
         switch (step) {
             case 0:
                 return <IncluirCliente />;
             case 1:
-                return <IncluirEndereco values={values} setFieldValue={setFieldValue}/>;
+                return <IncluirEndereco values={values} setFieldValue={setFieldValue} />;
             case 2:
                 return <IncluirAnimais cliente={cliente} setCliente={setCliente} />;
             default:
                 return <IncluirCliente />;
-                
+
         }
     }
 
     const initialValues = { ...cliente };
+    console.log('initial')
+    console.log(initialValues)
 
     const validationSchema = Yup.object({
         nome: Yup.string()
@@ -136,73 +126,71 @@ function IncluirClienteModal({
     });
 
     return (
-        <IncluirClienteContext.Provider value={{ cliente, setCliente }}>
-            <Modal
-                {...props}
-                onRequestClose={closeModal}
-                style={incluirClienteStyle}
+        <Modal
+            isOpen={isOpen}
+            onRequestClose={closeModal}
+            style={incluirClienteStyle}
+        >
+            <Formik
+                onSubmit={handleSubmit}
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                className={style.formik}
             >
-                <Formik
-                    onSubmit={handleSubmit}
-                    initialValues={initialValues}
-                    validationSchema={validationSchema}
-                    className={style.formik}
-                >
-                    {({ values, isSubimitting, setFieldValue }) => (
-                        <Form key={uuid4} className={style.form}>
+                {({ values, isSubimitting, setFieldValue }) => (
+                    <Form key={uuid4} className={style.form}>
 
-                            <CCol gap="0">
-                                <ModalTittle>{Steps[step]}</ModalTittle>
+                        <CCol gap="0">
+                            <ModalTittle>{Steps[step]}</ModalTittle>
 
-                                <StepContainer>
-                                    {Steps.map((item, index) => (
-                                        <>
-                                            {index ? <Foward key={uuid4}>{">"}</Foward> : ""}
-                                            <Step
-                                                key={index}
-                                                $ativo={index === step}
-                                                onClick={_ => setStep(index)}
-                                            >
-                                                {item}
-                                            </Step>
-                                        </>
-                                    ))}
-                                </StepContainer>
+                            <StepContainer>
+                                {Steps.map((item, index) => (
+                                    <>
+                                        {index ? <Foward key={uuid4}>{">"}</Foward> : ""}
+                                        <Step
+                                            key={index}
+                                            $ativo={index === step}
+                                            onClick={_ => setStep(index)}
+                                        >
+                                            {item}
+                                        </Step>
+                                    </>
+                                ))}
+                            </StepContainer>
 
-                                {getCompStep(values, setFieldValue)}
-                            </CCol>
+                            {getCompStep(values, setFieldValue)}
+                        </CCol>
 
-                            <BackFowardWrapper>
-                                <Button
-                                    onClick={_ => step !== 0 ? setStep(step - 1) : closeModal()}
-                                    type={"button"}
-                                >
-                                    {step !== 0 ? "Voltar" : "Fechar"}
-                                </Button>
-                                <Button
-                                    $roxo
-                                    onClick={(e) => {
-                                        if (step !== 2) {
-                                            setStep(step + 1);
-                                            e.target.type = "button";
-                                        }
-                                        else {
-                                            e.target.type = "submit";
-                                            setStep(0);
-                                        }
-                                    }}
-                                    type={"button"}
-                                    disabled={isSubimitting}
-                                >
-                                    {step !== 2 ? "Próximo" : "Salvar"}
-                                </Button>
-                            </BackFowardWrapper>
+                        <BackFowardWrapper>
+                            <Button
+                                onClick={_ => step !== 0 ? setStep(step - 1) : closeModal()}
+                                type={"button"}
+                            >
+                                {step !== 0 ? "Voltar" : "Fechar"}
+                            </Button>
+                            <Button
+                                $roxo
+                                onClick={(e) => {
+                                    if (step !== 2) {
+                                        setStep(step + 1);
+                                        e.target.type = "button";
+                                    }
+                                    else {
+                                        e.target.type = "submit";
+                                        setStep(0);
+                                    }
+                                }}
+                                type={"button"}
+                                disabled={isSubimitting}
+                            >
+                                {step !== 2 ? "Próximo" : "Salvar"}
+                            </Button>
+                        </BackFowardWrapper>
 
-                        </Form>
-                    )}
-                </Formik>
-            </Modal>
-        </IncluirClienteContext.Provider>
+                    </Form>
+                )}
+            </Formik>
+        </Modal>
     )
 }
 
