@@ -47,14 +47,13 @@ function IncluirClienteModal({
 
     async function handleSubmit(values, { setSubmitting }) {
         setStep(0);
-        console.log(values);
-        console.log(JSON.stringify);
 
         try {
             let response;
 
             if (values.idCliente == '') {
                 console.log('post')
+                values.animais = [...cliente.animais];
                 response = await incluirCliente(values);
             }
             else {
@@ -94,7 +93,7 @@ function IncluirClienteModal({
         }
     }
 
-    const initialValues = { ...cliente };
+    const initialValues = cliente ;
     console.log('initial')
     console.log(initialValues)
 

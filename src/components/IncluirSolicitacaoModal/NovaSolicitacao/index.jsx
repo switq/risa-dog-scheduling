@@ -84,6 +84,7 @@ function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSele
     }
 
     function selecionarCliente(user) {
+        searchReset();
         const idCliente = user.idCliente;
 
         setBusca(user.nome)

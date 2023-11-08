@@ -5,7 +5,7 @@ import style from './SolicitacaoCard.module.scss'
 const CardContainer = styled.div`
         background-color: ${(props) => {
         if (props.status === 'P') return `var(--magenta)`;
-        if (props.status === 'T') return `var(--verde)`;
+        if (props.status === 'F') return `var(--verde)`;
         if (props.status === 'C') return `var(--vermelho)`;
     }};
     `
@@ -17,7 +17,7 @@ function SolicitacaoCard({solicitacaoAAAAA}) {
         servicos: ['banho', 'tosa'],
         horaInicio: '9:00',
         horaTermino: '9:30',
-        status: 'T',
+        status: 'F',
     }
 
     const {cliente, animal, servicos, horaInicio, horaTermino, status} = solicitacao;

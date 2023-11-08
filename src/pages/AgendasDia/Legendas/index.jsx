@@ -3,7 +3,7 @@ import style from './Legendas.module.scss'
 function Legendas() {
     const legendas = [
         { text: 'Pendente', color: 'var(--magenta)' },
-        { text: 'Terminado', color: 'var(--verde)' },
+        { text: 'Finalizado', color: 'var(--verde)' },
         { text: 'Cancelado', color: 'var(--vermelho)' },
     ]
     return (
