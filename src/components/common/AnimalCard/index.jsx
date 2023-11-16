@@ -25,7 +25,6 @@ export default function AnimalCard({ idAnimal, ativo, toggleModal, cliente, setS
     }
 
     function selecionarAnimal() {
-        console.log('selecionar animal')
         if (setSelecionado === '') return
         setSelecionado(animal);
     }

@@ -93,9 +93,7 @@ function IncluirClienteModal({
         }
     }
 
-    const initialValues = cliente ;
-    console.log('initial')
-    console.log(initialValues)
+    const initialValues = cliente;
 
     const validationSchema = Yup.object({
         nome: Yup.string()

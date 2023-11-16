@@ -7,6 +7,10 @@ import unha from '../../../../assets/img/unha.png'
 import escovacao from '../../../../assets/img/escovacao.png'
 import style from './SelecionarServicos.module.scss'
 import { Button } from '../../../common/Button.style';
+import { useState } from 'react';
+import { v4 as uuid4 } from 'uuid';
+import { useEffect } from 'react';
+
 
 const selecionarServicosStyle = {
     content: {
@@ -25,16 +29,55 @@ const selecionarServicosStyle = {
 }
 
 const servicos = [
-    {nome: 'Banho', path: banho},
-    {nome: 'Tosa', path: tosa},
-    {nome: 'Corte de unha', path: unha},
-    {nome: 'Escovação', path: escovacao},
+    { id: 1, nome: 'Banho', path: banho },
+    { id: 2, nome: 'Tosa', path: tosa },
+    { id: 3, nome: 'Corte de unha', path: unha },
+    { id: 4, nome: 'Escovação', path: escovacao },
 ]
 
-function SelecionarServicos() {
-    return ( 
+function SelecionarServicos({ isOpen, closeModal, setSolicitacao, execucoes }) {
+    const [servicosSelecionado, setServicosSelecionado] = useState([...execucoes]);
+
+    useEffect(() => {
+        setServicosSelecionado([...execucoes])
+    }, [isOpen])
+
+    function servSelect(serv) {
+        const newServicosSelecionado = [...servicosSelecionado];
+        const index = newServicosSelecionado.findIndex(exec => exec.idServico === serv.id);
+
+        if(index === -1) {
+            newServicosSelecionado.push({
+                idServico: serv.id,
+                nomeServico: serv.nome,
+                idExecucao: uuid4(),
+                idColaborador: '',
+                nomeColaborador: '',
+                idEspecialidade: '',
+                // MUDAR DEPOIS
+                agendaExecucao: '1000000000000000000000000000000000000000000',
+                adicional: 0,
+            })
+        } else {
+            newServicosSelecionado.splice(index, 1);
+        }
+
+        setServicosSelecionado(newServicosSelecionado);
+    }
+
+    function submitChanges() {
+        setSolicitacao(prevSolicitacao => {
+            const newSolicitacao = { ...prevSolicitacao };
+            newSolicitacao.execucoes = servicosSelecionado;
+            return newSolicitacao
+        })
+        closeModal();
+    }
+
+    return (
         <Modal
-            // isOpen="true"
+            isOpen={isOpen}
+            onRequestClose={closeModal}
             style={selecionarServicosStyle}
         >
             <div className={style.container}>
@@ -43,18 +86,29 @@ function SelecionarServicos() {
 
                     <div className={style.cardsContainer}>
                         {servicos.map((serv, index) => (
-                            <ServicoCard texto={serv.nome} path={serv.path} key={index}/>
+                            <ServicoCard
+                                ativo={servicosSelecionado.reduce((acc, exec) => acc || (exec.idServico == serv.id), false)}
+                                onClick={e => servSelect(serv)}
+                                texto={serv.nome}
+                                path={serv.path}
+                                key={index}
+                            />
                         ))}
                     </div>
                 </div>
 
                 <div className={style.cardsContainer}>
-                    <Button>Cancelar</Button>
-                    <Button $roxo>Confirmar</Button>
+                    <Button onClick={closeModal}>Cancelar</Button>
+                    <Button
+                        $roxo
+                        onClick={submitChanges}
+                    >
+                        Confirmar
+                    </Button>
                 </div>
             </div>
         </Modal>
-     );
+    );
 }
 
 export default SelecionarServicos;

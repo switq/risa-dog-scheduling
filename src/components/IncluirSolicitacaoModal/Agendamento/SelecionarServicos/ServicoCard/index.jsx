@@ -1,11 +1,35 @@
+import styled from 'styled-components';
 import style from './ServicoCard.module.scss'
 
-function ServicoCard({texto, path, ativo, onClick=''}) {
+const CardContainer = styled.div`
+    ${(props) => {
+        if(props.ativo) return `
+            background-color: var(--magenta);
+            color: var(--light);
+            &:hover {
+                background-color: var(--magenta02);
+            }
+            `
+            else return `
+            background-color: var(--roxo03);
+            color: var(--dark);
+            &:hover {
+                background-color: var(--roxo04);
+            }
+        `
+    }}
+`
+
+function ServicoCard({texto, path, ativo=false, ...props}) {
     return ( 
-        <div className={style.cardContainer}>
+        <CardContainer
+            ativo={ativo}
+            className={style.cardContainer}
+            {...props}
+        >
             <img src={path} alt={texto} />
             <p>{texto}</p>
-        </div>
+        </CardContainer>
      );
 }
 

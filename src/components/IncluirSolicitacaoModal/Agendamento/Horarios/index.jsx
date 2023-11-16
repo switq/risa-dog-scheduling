@@ -3,7 +3,7 @@ import style from './Horarios.module.scss'
 import { ModalTittle } from '../../../common/Modal.style';
 import HoraCard from './HoraCard';
 import { Button } from '../../../common/Button.style';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const horariosStyle = {
     content: {
@@ -31,54 +31,90 @@ for (let i = 9; i < 20; i++) {
 
 // Molde de agenda vazia
 const agendaMolde = []
-for(let i = 0; i < 44; i++) {
-    agendaMolde.push(0);
+for (let i = 0; i < 44; i++) {
+    agendaMolde[i] = 0;
 }
 
-// Teste
-const agendaFunc = [...agendaMolde]
-agendaFunc[12] = 1;
-agendaFunc[13] = 1;
+function Horarios({
+    isOpen,
+    closeModal,
+    colaborador,
+    execucoes,
+}) {
 
-
-function Horarios({colaborador}) {
     const [horariosSelecionados, setHorariosSelecionados] = useState([...agendaMolde]);
+    const [horariosIndisponiveis, setHorariosIndisponiveis] = useState();
+
+    useEffect(() => {
+        setHorariosIndisponiveis(gerarIndisponíveis());
+    }, [isOpen])
 
     function toggleHorario(index) {
-        if (agendaFunc[index]) return;
         const newAgenda = [...horariosSelecionados];
         newAgenda[index] = newAgenda[index] ? 0 : 1;
         setHorariosSelecionados(newAgenda);
     }
-    
+
+    function gerarIndisponíveis() {
+        let agendaIndisponivel = '00000000000000000000000000000000000000000000'
+        console.log(execucoes)
+
+        if (!execucoes || !colaborador) return;
+
+        // Execuções
+        execucoes.forEach((exec) => {
+            let agendaTemp = ''
+            for (let i = 0; i < 44; i++) {
+                agendaTemp = agendaTemp + (exec.agendaExecucao[i] === '1' ? '1' : agendaIndisponivel[i])
+            }
+            agendaIndisponivel = agendaTemp;
+        })
+
+        // Colaborador ativo
+        {
+            let agendaTemp = ''
+            for (let i = 0; i < 44; i++) {
+                agendaTemp = agendaTemp + (colaborador.objAgenda[i] === '1' ? '1' : agendaIndisponivel[i])
+            }
+            agendaIndisponivel = agendaTemp;
+        }
+
+        return agendaIndisponivel;
+    }
+
     return (
         <Modal
-            isOpen={true}
+            isOpen={isOpen}
             style={horariosStyle}
+            onRequestClose={closeModal}
         >
-            <div className={style.horarioContainer}>
-                <div>
-                    <ModalTittle>Diogo G.</ModalTittle>
-                    <div className={style.horasContainer}>
-                        {
-                            horarios.map((hor, index) => (
-                                <HoraCard
-                                    hora={hor.hora}
-                                    ativo={horariosSelecionados[index]}
-                                    desativado={agendaFunc[index]}
-                                    onClick={() => toggleHorario(index)}
-                                />
-                            ))
-                        }
+            {
+                !colaborador ? '' : <div className={style.horarioContainer}>
+                    <div>
+                        <ModalTittle>{colaborador.nomeColaborador}</ModalTittle>
+                        <div className={style.horasContainer}>
+                            {
+                                horarios.map((hor, index) => (
+                                    <HoraCard
+                                        key={index}
+                                        hora={hor.hora}
+                                        ativo={horariosSelecionados[index] == 1}
+                                        desativado={horariosIndisponiveis[index] == 0}
+                                        onClick={() => toggleHorario(index)}
+                                    />
+                                ))
+                            }
+                        </div>
                     </div>
+                    <Button
+                        $roxo
+                        onClick={() => console.log(horariosSelecionados)}
+                    >
+                        Confirmar
+                    </Button>
                 </div>
-                <Button 
-                    $roxo
-                    onClick={() => console.log(horariosSelecionados)}
-                >
-                    Confirmar
-                </Button>
-            </div>
+            }
+
         </Modal>
     );
 }

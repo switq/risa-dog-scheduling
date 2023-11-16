@@ -57,7 +57,28 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
         desconto: '',
         status: '',
         idEspecialidade: '',
-        execucoes: [],
+        execucoes: [
+          {
+            idServico: 1,
+            nomeServico: 'Banho',
+            idExecucao: uuid4(),
+            idColaborador: '',
+            nomeColaborador: '',
+            idEspecialidade: '',
+            agendaExecucao: '00001000000000000000000000000000000000000000',
+            adicional: 0,
+          },
+          {
+            idServico: 2,
+            nomeServico: 'Tosa',
+            idExecucao: uuid4(),
+            idColaborador: '',
+            nomeColaborador: '',
+            idEspecialidade: '',
+            agendaExecucao: '11000000000000000000000000000000000000000000',
+            adicional: 0,
+          },
+        ],
       })
     }
   }, [dadosSolicitacao])

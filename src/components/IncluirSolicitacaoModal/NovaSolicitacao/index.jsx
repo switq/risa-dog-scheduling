@@ -97,8 +97,6 @@ function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSele
             })
             .catch((erro) => console.log(erro))
 
-        console.log('CLIENTE SELECT')
-        console.log(cliente);
         clienteAtivo = { ...cliente }
     }
 
