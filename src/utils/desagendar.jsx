@@ -1,28 +1,35 @@
-export default function desagendar(idExecucao, setSolicitacao, setColaboradores) {
-    setSolicitacao((prevSolicitacao) => {
-        const newSolicitacao = {...prevSolicitacao}
-        const indexExecucao = newSolicitacao.execucoes.findIndex((exec) => exec.idExecucao === idExecucao);
-        const execucao = newSolicitacao.execucoes[indexExecucao];
+import _ from 'lodash';
 
-        setColaboradores((prevColaboradores) => {
-            const newColaboradores = [...prevColaboradores];
-            const indexColaborador = prevColaboradores.findIndex((colab) => colab.idColaborador === execucao.idColaborador);
-            const colaborador = newColaboradores[indexColaborador];
-            
-            const colaboradorAgenda = colaborador.objAgenda.split('');
-            const agendaExecucao = execucao.agendaExecucao;
+export default function desagendar(idExecucao, setSolicitacao, setColaboradores, colaboradores, solicitacao, horariosADesagendar=false) {
+    const newSolicitacao = _.cloneDeep(solicitacao);
 
-            colaboradorAgenda.forEach((h, i) => {
-                colaboradorAgenda[i] = agendaExecucao[i] === '1' ? 0 : colaboradorAgenda[i];
-            })
-            
-            colaborador.objAgenda = colaboradorAgenda.join('');
+    const indexExecucao = newSolicitacao.execucoes.findIndex((exec) => exec.idExecucao === idExecucao);
+    const execucao = newSolicitacao.execucoes[indexExecucao];
 
-            return newColaboradores;
-        })
+    if (!colaboradores || !execucao.idColaborador) {
 
-        execucao.agendaExecucao = '';
+    } else {
+        const newColaboradores = _.cloneDeep(colaboradores);
 
-        return newSolicitacao;
-    })
+        const indexColaborador = colaboradores.findIndex((colab) => {
+            return colab.idColaborador === execucao.idColaborador
+        });
+
+        const colaborador = newColaboradores[indexColaborador];
+
+        let agendaExecucao = '' + execucao.agendaExecucao;
+        if(horariosADesagendar) agendaExecucao = horariosADesagendar;
+        const colaboradorAgenda = colaborador.objAgenda.split('');
+
+        for (let i = 0; i < 44; i++) {
+            colaboradorAgenda[i] = agendaExecucao[i] == '1' ? '0' : colaboradorAgenda[i];
+        }
+
+        colaborador.objAgenda = colaboradorAgenda.join('');
+        setColaboradores(newColaboradores);
+    }
+
+    execucao.agendaExecucao = '0000000000000000000000000000000000000000000';
+
+    setSolicitacao(newSolicitacao);
 }

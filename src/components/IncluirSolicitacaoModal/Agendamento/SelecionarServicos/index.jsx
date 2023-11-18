@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { v4 as uuid4 } from 'uuid';
 import { useEffect } from 'react';
 import desagendar from '../../../../utils/desagendar';
+import _ from 'lodash';
 
 
 const selecionarServicosStyle = {
@@ -38,7 +39,8 @@ const servicos = [
 
 function SelecionarServicos({ 
     isOpen, 
-    closeModal, 
+    closeModal,
+    solicitacao,
     setSolicitacao,
     setColaboradores,
     execucoes, 
@@ -64,7 +66,7 @@ function SelecionarServicos({
                 idColaborador: '',
                 nomeColaborador: '',
                 idEspecialidade: '',
-                agendaExecucao: '0000000000000000000000000000000000000000000',
+                agendaExecucao: '0000000000000000000000000000000000000000011',
                 adicional: 0,
             })
         } else {
@@ -74,22 +76,26 @@ function SelecionarServicos({
         setServicosSelecionado(newServicosSelecionado);
     }
 
-    function submitChanges() {
-        setSolicitacao(prevSolicitacao => {
-            const newSolicitacao = { ...prevSolicitacao };
-            let oldExecucoes = prevSolicitacao.execucoes;
+    async function submitChanges() {
+        const newSolicitacao = _.cloneDeep(solicitacao);
+        let oldExecucoes = _.cloneDeep(newSolicitacao.execucoes);
 
-            // Desagendar execucoes removidas
+        // Desagendar execucoes removidas
 
-            oldExecucoes.forEach((oldExec) => {
-                const oldExecId = oldExec.idExecucao;
-                const indexExecImutado = servicosSelecionado.findIndex((newExec) => newExec.idExecucao === oldExecId);
-                if (indexExecImutado === -1) desagendar(oldExecId, setSolicitacao, setColaboradores);
-            })
-
-            newSolicitacao.execucoes = servicosSelecionado;
-            return newSolicitacao;
+        oldExecucoes.forEach(async function (oldExec) {
+            const oldExecId = oldExec.idExecucao;
+            const indexExecImutado = servicosSelecionado.findIndex((newExec) => newExec.idExecucao === oldExecId);
+            if (indexExecImutado === -1) {
+                await desagendar(oldExecId, setSolicitacao, setColaboradores, colaboradores, solicitacao, oldExec.agendaExecucao)
+            };
         })
+
+        newSolicitacao.execucoes = servicosSelecionado;
+
+        await setSolicitacao((prevSolicitacao) => {
+            return newSolicitacao
+        });
+        console.log(solicitacao)
         closeModal();
     }
 

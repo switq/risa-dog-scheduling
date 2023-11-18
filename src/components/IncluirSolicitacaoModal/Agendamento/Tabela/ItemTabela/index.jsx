@@ -45,7 +45,7 @@ function ItemTabela({
         })
         setColaboradorSelecionado(colaborador);
         
-        desagendar(execucao.idExecucao, setSolicitacao, setColaboradores);
+        desagendar(execucao.idExecucao, setSolicitacao, setColaboradores, colaboradores, solicitacao);
 
         //idEspecialidade
         const especialidade = colaborador.especialidades.find((esp) => esp.idServicos === idServicos);
@@ -80,8 +80,10 @@ function ItemTabela({
             <Horarios
                 isOpen={horariosIsOpen}
                 closeModal={closeHorarios}
+                solicitacao={solicitacao}
                 setSolicitacao={setSolicitacao}
                 colaborador={colaboradorSelecionado}
+                colaboradores={colaboradores}
                 setColaboradores={setColaboradores}
                 execucoes={solicitacao.execucoes}
                 execucao={execucao}

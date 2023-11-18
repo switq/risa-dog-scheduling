@@ -60,6 +60,8 @@ function IncluirClienteModal({
                 console.log('put')
                 response = await putClienteAnimais(values.idCliente, values);
             }
+            console.log('cliente')
+            console.log(values)
 
             toast.success(response.data.message);
             console.log(response);

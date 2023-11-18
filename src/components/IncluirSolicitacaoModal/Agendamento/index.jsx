@@ -69,6 +69,7 @@ function Agendamento({
                 isOpen={selecionarServicosIsOpen}
                 closeModal={closeSelecionarServicos}
                 setSolicitacao={setSolicitacao}
+                solicitacao={solicitacao}
                 execucoes={solicitacao.execucoes}
                 colaboradores={colaboradores}
                 setColaboradores={setColaboradores}
