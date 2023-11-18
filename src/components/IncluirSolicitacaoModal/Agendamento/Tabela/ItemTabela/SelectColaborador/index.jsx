@@ -1,6 +1,11 @@
 import { useState } from "react";
 
-function SelectColaborador({ idServico, colaboradores, selecionarHorario, setColaboradores }) {
+function SelectColaborador({ 
+    idServico, 
+    colaboradores, 
+    selecionarHorario, 
+    setColaboradores 
+}) {
 
     const [colaboradorSelecionado, setColaboradorSelecionado] = useState();
 
@@ -16,13 +21,16 @@ function SelectColaborador({ idServico, colaboradores, selecionarHorario, setCol
 
     return (
         <select
+            defaultValue=""
             value={colaboradorSelecionado}
             onChange={e => {
-                setColaboradorSelecionado(e.target.value)
-                selecionarHorario(e.target.value, idServico);
+                const idColaborador = e.target.value;
+                setColaboradorSelecionado(idColaborador)
+                
+                selecionarHorario(idColaborador, idServico);
             }
             }>
-            <option value="" selected disabled hidden>Selecione um colaborador</option>
+            <option value="" disabled hidden>Selecione um colaborador</option>
             {colaboradores.map((colaborador, index) => {
                 if (colaboradorExecuteServico(colaborador, idServico))
                     return (

@@ -70,6 +70,8 @@ function Agendamento({
                 closeModal={closeSelecionarServicos}
                 setSolicitacao={setSolicitacao}
                 execucoes={solicitacao.execucoes}
+                colaboradores={colaboradores}
+                setColaboradores={setColaboradores}
             />
             {/* <Horarios /> */}
         </div>

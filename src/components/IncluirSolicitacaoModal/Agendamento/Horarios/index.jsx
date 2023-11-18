@@ -4,6 +4,7 @@ import { ModalTittle } from '../../../common/Modal.style';
 import HoraCard from './HoraCard';
 import { Button } from '../../../common/Button.style';
 import { useState, useEffect } from 'react';
+import desagendar from '../../../../utils/desagendar';
 
 const horariosStyle = {
     content: {
@@ -32,14 +33,17 @@ for (let i = 9; i < 20; i++) {
 // Molde de agenda vazia
 const agendaMolde = []
 for (let i = 0; i < 44; i++) {
-    agendaMolde[i] = 0;
+    agendaMolde.push(0);
 }
 
 function Horarios({
     isOpen,
     closeModal,
     colaborador,
+    setSolicitacao,
+    setColaboradores,
     execucoes,
+    execucao,
 }) {
 
     const [horariosSelecionados, setHorariosSelecionados] = useState([...agendaMolde]);
@@ -47,41 +51,96 @@ function Horarios({
 
     useEffect(() => {
         setHorariosIndisponiveis(gerarIndisponíveis());
+        setHorariosSelecionados(gerarSelecionados());
+        
     }, [isOpen])
 
     function toggleHorario(index) {
+        if (horariosIndisponiveis[index] === 1) return
         const newAgenda = [...horariosSelecionados];
         newAgenda[index] = newAgenda[index] ? 0 : 1;
         setHorariosSelecionados(newAgenda);
     }
 
     function gerarIndisponíveis() {
-        let agendaIndisponivel = '00000000000000000000000000000000000000000000'
-        console.log(execucoes)
-
-        if (!execucoes || !colaborador) return;
-
+        if (!execucoes || !colaborador || !execucao) return [...agendaMolde];
+        
+        let agendaIndisponivel = [...agendaMolde];
+        
         // Execuções
         execucoes.forEach((exec) => {
-            let agendaTemp = ''
             for (let i = 0; i < 44; i++) {
-                agendaTemp = agendaTemp + (exec.agendaExecucao[i] === '1' ? '1' : agendaIndisponivel[i])
+                agendaIndisponivel[i] = (exec.agendaExecucao[i] === '1' ? 1 : agendaIndisponivel[i])
             }
-            agendaIndisponivel = agendaTemp;
         })
-
+        
         // Colaborador ativo
         {
-            let agendaTemp = ''
             for (let i = 0; i < 44; i++) {
-                agendaTemp = agendaTemp + (colaborador.objAgenda[i] === '1' ? '1' : agendaIndisponivel[i])
+                agendaIndisponivel[i] = (colaborador.objAgenda[i] === '1' ? 1 : agendaIndisponivel[i])
             }
-            agendaIndisponivel = agendaTemp;
         }
-
+        
+        // Execução
+        {
+            for (let i = 0; i < 44; i++) {
+                agendaIndisponivel[i] = (execucao.agendaExecucao[i] === '1' ? 0 : agendaIndisponivel[i])
+            }
+        }
+        
+        console.log('agendaIndisponivel')
+        console.log(agendaIndisponivel)
         return agendaIndisponivel;
     }
+    
+    function gerarSelecionados() {
+        if (!execucoes || !colaborador || !execucao) return [...agendaMolde];
+        
+        const horariosSelecionados = [];
+        
+        for(let i = 0; i < 44; i++) {
+            horariosSelecionados[i] = execucao.agendaExecucao[i] == '1' ? 1 : 0;
+        }
+        console.log('horariosSelecionados')
+        console.log(horariosSelecionados)
 
+        return horariosSelecionados;
+    }
+
+    function submitAgendas() {
+        setSolicitacao((prevSolicitacao) => {
+            const newSolicitacao = {...prevSolicitacao};
+            const newExecucao = {...execucao};
+            const newExecucaoAgenda = horariosSelecionados.join('');
+            
+            newExecucao.agendaExecucao = newExecucaoAgenda;
+            const indexExecucao = newSolicitacao.execucoes.findIndex((e) => e.idExecucao === newExecucao.idExecucao);
+            newSolicitacao.execucoes[indexExecucao] = newExecucao;
+
+            desagendar(execucao.idExecucao, setSolicitacao, setColaboradores);
+            
+            setColaboradores((oldColaboradores) => {
+                const newColaboradores = [...oldColaboradores];
+
+                console.log('old')
+                console.log(newColaboradores)
+                const indexColaborador = newColaboradores.findIndex((colab) => colab.idColaborador === newExecucao.idColaborador);
+                // Agendar no objAgenda do colaborador
+                const objAgenda = newColaboradores[indexColaborador].objAgenda.split('');
+                objAgenda.forEach((h, i) => {
+                    objAgenda[i] = horariosSelecionados[i] == 1 ? 1 : objAgenda[i];
+                })
+                newColaboradores[indexColaborador].objAgenda = objAgenda.join('');
+
+                console.log(newColaboradores)
+                return newColaboradores;
+            })
+            
+            return newSolicitacao;
+        })
+        
+    }
+    
     return (
         <Modal
             isOpen={isOpen}
@@ -98,8 +157,8 @@ function Horarios({
                                     <HoraCard
                                         key={index}
                                         hora={hor.hora}
-                                        ativo={horariosSelecionados[index] == 1}
-                                        desativado={horariosIndisponiveis[index] == 0}
+                                        $ativo={horariosSelecionados[index]}
+                                        $desativado={horariosIndisponiveis[index]}
                                         onClick={() => toggleHorario(index)}
                                     />
                                 ))
@@ -108,7 +167,7 @@ function Horarios({
                     </div>
                     <Button
                         $roxo
-                        onClick={() => console.log(horariosSelecionados)}
+                        onClick={submitAgendas}
                     >
                         Confirmar
                     </Button>

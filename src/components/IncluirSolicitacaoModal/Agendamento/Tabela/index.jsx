@@ -7,7 +7,6 @@ function Tabela({ solicitacao, setSolicitacao, colaboradores, setColaboradores, 
 
     
 
-
     return (
         <table className={style.tabela}>
             <tr>
@@ -22,8 +21,10 @@ function Tabela({ solicitacao, setSolicitacao, colaboradores, setColaboradores, 
             {solicitacao.execucoes.map((execucao) => (
                 <ItemTabela
                     solicitacao={solicitacao}
+                    setSolicitacao={setSolicitacao}
                     execucao={execucao}
                     colaboradores={colaboradores}
+                    setColaboradores={setColaboradores}
                 />
             ))}
 

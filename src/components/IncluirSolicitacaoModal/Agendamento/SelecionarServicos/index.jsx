@@ -10,6 +10,7 @@ import { Button } from '../../../common/Button.style';
 import { useState } from 'react';
 import { v4 as uuid4 } from 'uuid';
 import { useEffect } from 'react';
+import desagendar from '../../../../utils/desagendar';
 
 
 const selecionarServicosStyle = {
@@ -35,7 +36,16 @@ const servicos = [
     { id: 4, nome: 'Escovação', path: escovacao },
 ]
 
-function SelecionarServicos({ isOpen, closeModal, setSolicitacao, execucoes }) {
+function SelecionarServicos({ 
+    isOpen, 
+    closeModal, 
+    setSolicitacao,
+    setColaboradores,
+    execucoes, 
+    colaboradores, 
+}) {
+
+
     const [servicosSelecionado, setServicosSelecionado] = useState([...execucoes]);
 
     useEffect(() => {
@@ -54,8 +64,7 @@ function SelecionarServicos({ isOpen, closeModal, setSolicitacao, execucoes }) {
                 idColaborador: '',
                 nomeColaborador: '',
                 idEspecialidade: '',
-                // MUDAR DEPOIS
-                agendaExecucao: '1000000000000000000000000000000000000000000',
+                agendaExecucao: '0000000000000000000000000000000000000000000',
                 adicional: 0,
             })
         } else {
@@ -68,8 +77,18 @@ function SelecionarServicos({ isOpen, closeModal, setSolicitacao, execucoes }) {
     function submitChanges() {
         setSolicitacao(prevSolicitacao => {
             const newSolicitacao = { ...prevSolicitacao };
+            let oldExecucoes = prevSolicitacao.execucoes;
+
+            // Desagendar execucoes removidas
+
+            oldExecucoes.forEach((oldExec) => {
+                const oldExecId = oldExec.idExecucao;
+                const indexExecImutado = servicosSelecionado.findIndex((newExec) => newExec.idExecucao === oldExecId);
+                if (indexExecImutado === -1) desagendar(oldExecId, setSolicitacao, setColaboradores);
+            })
+
             newSolicitacao.execucoes = servicosSelecionado;
-            return newSolicitacao
+            return newSolicitacao;
         })
         closeModal();
     }

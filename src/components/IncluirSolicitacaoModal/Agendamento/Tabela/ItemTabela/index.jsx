@@ -2,14 +2,17 @@ import SelectColaborador from "./SelectColaborador";
 import { useState } from "react";
 import Horarios from "../../Horarios";
 import { Button } from "../../../../common/Button.style";
+import desagendar from "../../../../../utils/desagendar";
 
 
 function ItemTabela({
     execucao,
     colaboradores,
     solicitacao,
-    servicos,
-    selecionarHorario }) {
+    setSolicitacao,
+    setColaboradores,
+    servicos, 
+}) {
 
 
 
@@ -36,11 +39,29 @@ function ItemTabela({
         }
     }
 
-    function selecionarHorario(idColaborador, idServico) {
+    function selecionarHorario(idColaborador, idServicos) {
         const colaborador = colaboradores.find((colab) => {
             return colab.idColaborador == idColaborador
         })
-        setColaboradorSelecionado(colaborador)
+        setColaboradorSelecionado(colaborador);
+        
+        desagendar(execucao.idExecucao, setSolicitacao, setColaboradores);
+
+        //idEspecialidade
+        const especialidade = colaborador.especialidades.find((esp) => esp.idServicos === idServicos);
+
+        setSolicitacao((prevSolicitacao) => {
+            const newSolicitacao = {...prevSolicitacao};
+            const indexExecucao = newSolicitacao.execucoes.findIndex((exec) => exec.idExecucao === execucao.idExecucao);
+            newSolicitacao.execucoes[indexExecucao].nomeColaborador = colaborador.nomeColaborador;
+            newSolicitacao.execucoes[indexExecucao].idColaborador = colaborador.idColaborador;
+            newSolicitacao.execucoes[indexExecucao].idEspecialidade = especialidade.idEspecialidade;
+            
+            console.log(newSolicitacao)
+            return newSolicitacao;
+        })
+
+
     }
 
     return (
@@ -59,8 +80,11 @@ function ItemTabela({
             <Horarios
                 isOpen={horariosIsOpen}
                 closeModal={closeHorarios}
+                setSolicitacao={setSolicitacao}
                 colaborador={colaboradorSelecionado}
+                setColaboradores={setColaboradores}
                 execucoes={solicitacao.execucoes}
+                execucao={execucao}
             />
         </tr>
     );
