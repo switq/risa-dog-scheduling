@@ -40,63 +40,40 @@ const servicos = [
 function SelecionarServicos({ 
     isOpen, 
     closeModal,
-    solicitacao,
-    setSolicitacao,
-    setColaboradores,
-    execucoes, 
-    colaboradores, 
+    alterarServicos,
+    execucoes,
 }) {
 
-
-    const [servicosSelecionado, setServicosSelecionado] = useState([...execucoes]);
-
-    useEffect(() => {
-        setServicosSelecionado([...execucoes])
-    }, [isOpen])
-
-    function servSelect(serv) {
-        const newServicosSelecionado = [...servicosSelecionado];
-        const index = newServicosSelecionado.findIndex(exec => exec.idServico === serv.id);
-
-        if(index === -1) {
-            newServicosSelecionado.push({
-                idServico: serv.id,
-                nomeServico: serv.nome,
-                idExecucao: uuid4(),
-                idColaborador: '',
-                nomeColaborador: '',
-                idEspecialidade: '',
-                agendaExecucao: '0000000000000000000000000000000000000000011',
-                adicional: 0,
-            })
-        } else {
-            newServicosSelecionado.splice(index, 1);
-        }
-
-        setServicosSelecionado(newServicosSelecionado);
-    }
+    const [servicosSelecionados, setServicosSelecionados] = useState([]);
 
     async function submitChanges() {
-        const newSolicitacao = _.cloneDeep(solicitacao);
-        let oldExecucoes = _.cloneDeep(newSolicitacao.execucoes);
-
-        // Desagendar execucoes removidas
-
-        oldExecucoes.forEach(async function (oldExec) {
-            const oldExecId = oldExec.idExecucao;
-            const indexExecImutado = servicosSelecionado.findIndex((newExec) => newExec.idExecucao === oldExecId);
-            if (indexExecImutado === -1) {
-                await desagendar(oldExecId, setSolicitacao, setColaboradores, colaboradores, solicitacao, oldExec.agendaExecucao)
-            };
-        })
-
-        newSolicitacao.execucoes = servicosSelecionado;
-
-        await setSolicitacao((prevSolicitacao) => {
-            return newSolicitacao
-        });
-        console.log(solicitacao)
+        alterarServicos([...servicosSelecionados]);
         closeModal();
+    }
+
+    useEffect(() => {
+        gerarSelecionados();
+    }, [isOpen]) 
+
+    
+    function gerarSelecionados() {
+        const servicosJaSelecionados = execucoes.map((exec) => exec.idServico);
+        setServicosSelecionados([...servicosJaSelecionados]);
+    }
+
+    function toggleServico(idServico) {
+        const newServicosSelecionados = [...servicosSelecionados];
+        const servicoIndex = servicosSelecionados.findIndex((serv) => serv === idServico);
+        if (servicoIndex === -1) {
+            newServicosSelecionados.push(idServico);
+        } else {
+            newServicosSelecionados.splice(servicoIndex, 1);
+        }
+        setServicosSelecionados(newServicosSelecionados)
+    }
+
+    function verificaAtivo(idServico) {
+        return servicosSelecionados.includes(idServico);
     }
 
     return (
@@ -112,8 +89,8 @@ function SelecionarServicos({
                     <div className={style.cardsContainer}>
                         {servicos.map((serv, index) => (
                             <ServicoCard
-                                ativo={servicosSelecionado.reduce((acc, exec) => acc || (exec.idServico == serv.id), false)}
-                                onClick={e => servSelect(serv)}
+                                ativo={verificaAtivo(serv.id)}
+                                onClick={e => toggleServico(serv.id)}
                                 texto={serv.nome}
                                 path={serv.path}
                                 key={index}
