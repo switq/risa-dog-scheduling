@@ -30,7 +30,7 @@ const incluirSolicitacaoStyle = {
 
 function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen, ...props }) {
   const [step, setStep] = useState(0);
-  const Steps = ["Nova Solicitação", "Agendamento", "Pagamento"];
+  const Steps = ["Nova Solicitação", "Agendamento"];
 
   // States solicitacao
   const [cliente, setCliente] = useState();
@@ -52,32 +52,11 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
         data: '',
         horaInicio: '',
         horaTermino: '',
-        preco: '',
-        desconto: '',
+        preco: 0,
+        desconto: 0,
         status: '',
         idEspecialidade: '',
-        execucoes: [
-          {
-            idServico: 1,
-            nomeServico: 'Banho',
-            idExecucao: uuid4(),
-            idColaborador: '',
-            nomeColaborador: '',
-            idEspecialidade: '',
-            agendaExecucao: '00000000000000000000000000000000000000000000',
-            adicional: 0,
-          },
-          {
-            idServico: 2,
-            nomeServico: 'Tosa',
-            idExecucao: uuid4(),
-            idColaborador: '',
-            nomeColaborador: '',
-            idEspecialidade: '',
-            agendaExecucao: '00000000000000000000000000000000000000000000',
-            adicional: 0,
-          },
-        ],
+        execucoes: [],
 
         idCliente: '',
         nomeCliente: '',
@@ -188,11 +167,9 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
                 };
               }
               else if (step == 1) {
-                setStep(step + 1);;
+                console.log(solicitacao)
               }
-              else if (step === 2) {
-                setStep(0);
-              }
+
             }}
             type={"button"}
           >

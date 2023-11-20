@@ -17,6 +17,7 @@ const execucaoBase = {
     nomeColaborador: '',
     idEspecialidade: '',
     agendaExecucao: '00000000000000000000000000000000000000000000',
+    preco: 0,
     adicional: 0,
 }
 

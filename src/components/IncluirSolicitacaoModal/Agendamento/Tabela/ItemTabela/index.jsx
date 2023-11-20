@@ -1,8 +1,10 @@
 import SelectColaborador from "./SelectColaborador";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Horarios from "../../Horarios";
 import { Button } from "../../../../common/Button.style";
 import _ from 'lodash'
+import InputMoney from "../../../../common/Inputs/InputMoney";
+import { Component } from "react";
 
 const agendaZerada = '00000000000000000000000000000000000000000000';
 
@@ -11,7 +13,7 @@ function ItemTabela({
     colaboradores,
     solicitacao,
     setSolicitacao,
-    servicos, 
+    servicos,
 }) {
 
     const [colaboradorSelecionado, setColaboradorSelecionado] = useState();
@@ -28,7 +30,7 @@ function ItemTabela({
         const idColaboradorConvertido = parseInt(idColaborador);
         const indexColaborador = colaboradores.findIndex((colab) => colab.idColaborador === idColaboradorConvertido);
         const colaborador = _.cloneDeep(colaboradores[indexColaborador]);
-        
+
         if (indexColaborador === -1) return;
 
         const newExecucao = _.cloneDeep(execucao);
@@ -37,7 +39,7 @@ function ItemTabela({
         newExecucao.nomeColaborador = colaborador.nomeColaborador;
         newExecucao.idEspecialidade = buscarIdEspecialidade(colaborador, execucao.idServico);
         newExecucao.agendaExecucao = agendaZerada;
-        
+
         const newSolicitacao = _.cloneDeep(solicitacao);
         const indexExecucao = buscarIndexExecucao(newExecucao.idExecucao);
         newSolicitacao.execucoes[indexExecucao] = newExecucao;
@@ -53,21 +55,21 @@ function ItemTabela({
         return indexExecucao;
     }
 
-    function buscarIdEspecialidade(colaborador, idServico){
+    function buscarIdEspecialidade(colaborador, idServico) {
         const especialidade = colaborador.especialidades.find(
             esp => esp.idServicos === idServico
         )
         return especialidade.idEspecialidade;
     }
 
-    function agendarHorarios(newAgenda) {
+    function agendarHorarios(newAgenda, horaInicio, horaTermino) {
         const newExecucao = _.cloneDeep(execucao);
         const indexExecucao = buscarIndexExecucao(newExecucao.idExecucao);
         newExecucao.agendaExecucao = newAgenda;
 
         const newSolicitacao = _.cloneDeep(solicitacao);
         newSolicitacao.execucoes[indexExecucao] = newExecucao;
-        
+
         setSolicitacao(newSolicitacao);
     }
 
@@ -90,18 +92,72 @@ function ItemTabela({
 
     function renderPreco() {
         const porte = solicitacao.porte;
+        let preco = precoServico(porte);
+        totalFirstRender(preco);
+
+        return `${preco.toFixed(2)}`;
+    }
+
+    function precoServico(porte) {
         const servico = servicos.find(serv => serv.idServicos === execucao.idServico);
-        console.log(servico)
         let preco;
         if (porte == 'P') preco = servico.preco_p;
         if (porte == 'M') preco = servico.preco_m;
         if (porte == 'G') preco = servico.preco_g;
 
-        preco = parseInt(preco).toFixed(2);
-        console.log(preco)
+        preco = parseFloat(preco);
 
-        return `${preco}`;
+        return preco;
     }
+
+    function onChangeAdicional(valor) {
+        const preco = valor ? parseFloat(valor) : 0;
+        const newExecucao = _.cloneDeep(execucao);
+        const indexExecucao = buscarIndexExecucao(newExecucao.idExecucao);
+        newExecucao.adicional = preco;
+
+        const newSolicitacao = _.cloneDeep(solicitacao);
+        newSolicitacao.execucoes[indexExecucao] = newExecucao;
+
+        setSolicitacao(newSolicitacao);
+    }
+
+    function renderTotal() {
+        const newExecucao = _.cloneDeep(execucao);
+        const indexExecucao = buscarIndexExecucao(newExecucao.idExecucao);
+
+        const vlrServico = precoServico(solicitacao.porte);
+        const vlrAdicional = newExecucao.adicional;
+        const vlrTotal = (vlrServico ? vlrServico : 0) + (vlrAdicional ? vlrAdicional : 0)
+
+        newExecucao.total = vlrTotal;
+
+        const newSolicitacao = _.cloneDeep(solicitacao);
+        newSolicitacao.execucoes[indexExecucao] = newExecucao;
+
+        setSolicitacao(newSolicitacao);
+    }
+
+    function totalFirstRender(valor) {
+        if (!!execucao.total) return;
+
+        const newExecucao = _.cloneDeep(execucao);
+        const indexExecucao = buscarIndexExecucao(newExecucao.idExecucao);
+
+        newExecucao.total = valor;
+        newExecucao.preco = valor;
+
+        const newSolicitacao = _.cloneDeep(solicitacao);
+        newSolicitacao.execucoes[indexExecucao] = newExecucao;
+
+        setSolicitacao(newSolicitacao);
+    }
+
+    useEffect(() => {
+        renderTotal();
+    }, [execucao.adicional]);
+
+
 
     return (
         <tr>
@@ -115,8 +171,15 @@ function ItemTabela({
             <td>
                 {renderPreco()}
             </td>
-            <td></td>
-            <td></td>
+            <td>
+                <InputMoney
+                    value={execucao.adicional}
+                    onChange={onChangeAdicional}
+                />
+            </td>
+            <td>
+                {execucao.total}
+            </td>
 
             <Horarios
                 isOpen={horariosIsOpen}

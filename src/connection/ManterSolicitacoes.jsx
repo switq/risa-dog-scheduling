@@ -5,5 +5,5 @@ export function getServicos() {
 }
 
 export function getAgendasColaboradores(data) {
-    return axios.get(`https://risa-dog.onrender.com/agendas/colaboradores/lista?data=${data}`);
+    return axios.get(`https://risa-dog.onrender.com/agendas/colaboradores?data=${data}`);
 }

@@ -67,6 +67,7 @@ function Horarios({
         setHorariosSelecionados(gerarSelecionados());
     }, [isOpen, execucao])
 
+    // selecionar horarios
     useEffect(() => {
         const newHorariosSelecionados = [...agendaMolde];
         if (inicio >= 0 && termino >= 0) {
@@ -78,8 +79,6 @@ function Horarios({
     }, [inicio, termino])
 
     function submitAgendas() {
-        toast.info(`inicio: ${inicio >= 0 ? horarios[inicio].hora : 'não selecionado'} | termino: ${termino > 0 ? horarios[termino].hora : 'não selecionado'}`)
-
         if (!(inicio >= 0) || !(termino > 0)) {
             toast.warn("Selecione um intervalo de tempo");
             return;
@@ -87,7 +86,9 @@ function Horarios({
 
         const newHorariosSelecionados = _.cloneDeep(horariosSelecionados);
         const agendaExecucao = newHorariosSelecionados.join('');
-        agendarHorarios(agendaExecucao);
+        const horaInicio = horarios[inicio];
+        const horaTermino = horarios[termino];
+        agendarHorarios(agendaExecucao, horaInicio, horaTermino);
     }
 
     function toggleHorario(index) {
@@ -184,12 +185,13 @@ function Horarios({
             horariosSelecionados[i] = execucao.agendaExecucao[i] == '1' ? 1 : 0;
         }
 
+        // gerar inicio e termino
         horariosSelecionados.forEach((h, i) => {
             if (h && !horariosSelecionados[i - 1]) {
                 setInicio(i);
             }
-            else if (h && !horariosSelecionados[i + 1]) {
-                setTermino(i)
+            else if (h && horariosSelecionados[i - 1]) {
+                setTermino(i);
             }
         })
 
