@@ -10,6 +10,7 @@ import Agendamento from "./Agendamento";
 import Pagamento from "./Pagamento";
 import style from "./IncluirSolicitacaoModal.module.scss";
 import { getServicos } from "../../connection/ManterSolicitacoes";
+import _ from "lodash"
 
 const incluirSolicitacaoStyle = {
   content: {
@@ -48,8 +49,6 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
     } else {
       setSolicitacao({
         idSolicitacao: '',
-        idCliente: '',
-        idAnimal: '',
         data: '',
         horaInicio: '',
         horaTermino: '',
@@ -79,6 +78,14 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
             adicional: 0,
           },
         ],
+
+        idCliente: '',
+        nomeCliente: '',
+
+        idAnimal: '',
+        nomeAnimal: '',
+        especie: '',
+        porte: '',
       })
     }
   }, [dadosSolicitacao])
@@ -91,6 +98,21 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
 
   function verificarCliente() {
     return animalSelecionado && cliente;
+  }
+
+  function adicionarCliente() {
+    const dadosClienteAnimal = {
+      idCliente: cliente.idCliente,
+      nomeCliente: cliente.nome,
+      
+      idAnimal: animalSelecionado.idAnimal,
+      nomeAnimal: animalSelecionado.nome,
+      especie: animalSelecionado.especie,
+      porte: animalSelecionado.porte,
+    }
+    
+    const newSolicitacao = {..._.cloneDeep(solicitacao), ...dadosClienteAnimal};
+    setSolicitacao(newSolicitacao);
   }
 
   const getCompStep = () => {
@@ -117,6 +139,7 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
     }
   }
 
+
   return (
     <Modal
       onRequestClose={closeModal}
@@ -137,7 +160,7 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
                   key={index}
                   $ativo={index === step}
                   style={{ width: '14rem' }}
-                  // onClick={_ => setStep(index)}
+                // onClick={_ => setStep(index)}
                 >
                   {item}
                 </Step>
@@ -160,6 +183,7 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
             onClick={(e) => {
               if (step === 0) {
                 if (verificarCliente()) {
+                  adicionarCliente()
                   setStep(step + 1);
                 };
               }

@@ -46,7 +46,6 @@ function IncluirClienteModal({
 
 
     async function handleSubmit(values, { setSubmitting }) {
-        setStep(0);
 
         try {
             let response;
@@ -76,6 +75,7 @@ function IncluirClienteModal({
             console.log(JSON.parse(error.request.response).error);
             toast.error(JSON.parse(error.request.response).error);
         }
+        setStep(0);
     }
 
     let [step, setStep] = useState(0)

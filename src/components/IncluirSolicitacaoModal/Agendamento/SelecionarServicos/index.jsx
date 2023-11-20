@@ -8,9 +8,7 @@ import escovacao from '../../../../assets/img/escovacao.png'
 import style from './SelecionarServicos.module.scss'
 import { Button } from '../../../common/Button.style';
 import { useState } from 'react';
-import { v4 as uuid4 } from 'uuid';
 import { useEffect } from 'react';
-import desagendar from '../../../../utils/desagendar';
 import _ from 'lodash';
 
 

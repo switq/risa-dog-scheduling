@@ -1,7 +1,6 @@
 import style from './Agendamento.module.scss';
 import Tabela from './Tabela';
 import SelecionarServicos from './SelecionarServicos';
-import Horarios from './Horarios'
 import { v4 as uuid4 } from 'uuid';
 import { InputDate } from '../../common/Inputs/InputDate'
 import { Button } from '../../common/Button.style'
@@ -21,9 +20,9 @@ const execucaoBase = {
     adicional: 0,
 }
 
+const agendaZerada = '00000000000000000000000000000000000000000000'
+
 function Agendamento({
-    cliente,
-    animalSelecionado,
     solicitacao,
     setSolicitacao,
     colaboradores,
@@ -41,23 +40,26 @@ function Agendamento({
         setSelecionarServicosIsOpen(true);
     }
 
-    function atualizarData(novaData) {
-        const newSolicitacao = _.cloneDeep(solicitacao);
-        newSolicitacao.data = novaData;
-
-        // Reset de atributos
-        newSolicitacao.horaInicio = '';
-        newSolicitacao.horaTermino = '';
-        newSolicitacao.execucoes = [];
-
+    async function atualizarData(novaData) {
         // get colaboradores
         getAgendasColaboradores(novaData)
             .then((res) => res.data)
             .then((data) => setColaboradores([...data.colaboradores]))
             .catch((error) => console.log(error));
 
+        const newSolicitacao = _.cloneDeep(solicitacao);
+        newSolicitacao.data = novaData;
 
-        setSolicitacao(newSolicitacao);
+        // Reset de atributos
+        newSolicitacao.horaInicio = '';
+        newSolicitacao.horaTermino = '';
+        const listaServicos = newSolicitacao.execucoes.map(
+            exec => exec.idServico
+        )
+        newSolicitacao.execucoes = [];
+        await setSolicitacao(newSolicitacao);
+        newSolicitacao.execucoes = [...adicionarExecucoes(listaServicos)];
+        await setSolicitacao(newSolicitacao);
     }
 
     function selecionaServicos() {
@@ -104,7 +106,7 @@ function Agendamento({
 
     return (
         <div>
-            <p>{cliente.nome} | {animalSelecionado.nome} - {animalSelecionado.especie} - {animalSelecionado.porte}</p>
+            <p>{solicitacao.nomeCliente} | {solicitacao.nomeAnimal} - {solicitacao.especie} - {solicitacao.porte}</p>
             <hr />
             <div className={style.row}>
                 <InputDate
@@ -114,6 +116,12 @@ function Agendamento({
                 />
                 <Button onClick={selecionaServicos}>Selecionar serviços</Button>
             </div>
+            <Tabela 
+                solicitacao={solicitacao}
+                setSolicitacao={setSolicitacao}
+                colaboradores={colaboradores}
+                servicos={servicos}
+            />
             <SelecionarServicos 
                 isOpen={selecionarServicosIsOpen}
                 closeModal={closeSelecionarServicos}

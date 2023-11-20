@@ -2,66 +2,105 @@ import SelectColaborador from "./SelectColaborador";
 import { useState } from "react";
 import Horarios from "../../Horarios";
 import { Button } from "../../../../common/Button.style";
-import desagendar from "../../../../../utils/desagendar";
+import _ from 'lodash'
 
+const agendaZerada = '00000000000000000000000000000000000000000000';
 
 function ItemTabela({
     execucao,
     colaboradores,
     solicitacao,
     setSolicitacao,
-    setColaboradores,
     servicos, 
 }) {
 
-
-
     const [colaboradorSelecionado, setColaboradorSelecionado] = useState();
-
     const [horariosIsOpen, setHorariosIsOpen] = useState(false);
-    function openHorarios() { setHorariosIsOpen(true) }
+
+
+
+    function openHorarios() {
+        setHorariosIsOpen(true)
+    }
     function closeHorarios() { setHorariosIsOpen(false) }
+
+    function selecionarColaborador(idColaborador) {
+        const idColaboradorConvertido = parseInt(idColaborador);
+        const indexColaborador = colaboradores.findIndex((colab) => colab.idColaborador === idColaboradorConvertido);
+        const colaborador = _.cloneDeep(colaboradores[indexColaborador]);
+        
+        if (indexColaborador === -1) return;
+
+        const newExecucao = _.cloneDeep(execucao);
+
+        newExecucao.idColaborador = idColaborador;
+        newExecucao.nomeColaborador = colaborador.nomeColaborador;
+        newExecucao.idEspecialidade = buscarIdEspecialidade(colaborador, execucao.idServico);
+        newExecucao.agendaExecucao = agendaZerada;
+        
+        const newSolicitacao = _.cloneDeep(solicitacao);
+        const indexExecucao = buscarIndexExecucao(newExecucao.idExecucao);
+        newSolicitacao.execucoes[indexExecucao] = newExecucao;
+
+        setSolicitacao(newSolicitacao);
+        setColaboradorSelecionado(colaborador);
+    }
+
+    function buscarIndexExecucao(idExecucao) {
+        const indexExecucao = solicitacao.execucoes.findIndex(
+            exec => exec.idExecucao === idExecucao
+        )
+        return indexExecucao;
+    }
+
+    function buscarIdEspecialidade(colaborador, idServico){
+        const especialidade = colaborador.especialidades.find(
+            esp => esp.idServicos === idServico
+        )
+        return especialidade.idEspecialidade;
+    }
+
+    function agendarHorarios(newAgenda) {
+        const newExecucao = _.cloneDeep(execucao);
+        const indexExecucao = buscarIndexExecucao(newExecucao.idExecucao);
+        newExecucao.agendaExecucao = newAgenda;
+
+        const newSolicitacao = _.cloneDeep(solicitacao);
+        newSolicitacao.execucoes[indexExecucao] = newExecucao;
+        
+        setSolicitacao(newSolicitacao);
+    }
+
+    function renderHorarios() {
+        if (!colaboradorSelecionado) return;
+
+        return <Button onClick={openHorarios}>Selecione um horário</Button>
+
+    }
 
     function renderSelectColaborador() {
         if (!!colaboradores) {
             return <SelectColaborador
                 execucao={execucao}
                 colaboradores={colaboradores}
-                idServico={execucao.idServico}
-                selecionarHorario={selecionarHorario}
+                selecionarColaborador={selecionarColaborador}
             />
         }
     }
 
-    function renderHorarios() {
-        if (!!colaboradorSelecionado) {
-            return <Button onClick={openHorarios}>Selecione um horário</Button>
-        }
-    }
+    function renderPreco() {
+        const porte = solicitacao.porte;
+        const servico = servicos.find(serv => serv.idServicos === execucao.idServico);
+        console.log(servico)
+        let preco;
+        if (porte == 'P') preco = servico.preco_p;
+        if (porte == 'M') preco = servico.preco_m;
+        if (porte == 'G') preco = servico.preco_g;
 
-    function selecionarHorario(idColaborador, idServicos) {
-        const colaborador = colaboradores.find((colab) => {
-            return colab.idColaborador == idColaborador
-        })
-        setColaboradorSelecionado(colaborador);
-        
-        desagendar(execucao.idExecucao, setSolicitacao, setColaboradores, colaboradores, solicitacao);
+        preco = parseInt(preco).toFixed(2);
+        console.log(preco)
 
-        //idEspecialidade
-        const especialidade = colaborador.especialidades.find((esp) => esp.idServicos === idServicos);
-
-        setSolicitacao((prevSolicitacao) => {
-            const newSolicitacao = {...prevSolicitacao};
-            const indexExecucao = newSolicitacao.execucoes.findIndex((exec) => exec.idExecucao === execucao.idExecucao);
-            newSolicitacao.execucoes[indexExecucao].nomeColaborador = colaborador.nomeColaborador;
-            newSolicitacao.execucoes[indexExecucao].idColaborador = colaborador.idColaborador;
-            newSolicitacao.execucoes[indexExecucao].idEspecialidade = especialidade.idEspecialidade;
-            
-            console.log(newSolicitacao)
-            return newSolicitacao;
-        })
-
-
+        return `${preco}`;
     }
 
     return (
@@ -73,20 +112,19 @@ function ItemTabela({
             <td>
                 {renderHorarios()}
             </td>
-            <td></td>
+            <td>
+                {renderPreco()}
+            </td>
             <td></td>
             <td></td>
 
             <Horarios
                 isOpen={horariosIsOpen}
                 closeModal={closeHorarios}
-                solicitacao={solicitacao}
-                setSolicitacao={setSolicitacao}
-                colaborador={colaboradorSelecionado}
-                colaboradores={colaboradores}
-                setColaboradores={setColaboradores}
-                execucoes={solicitacao.execucoes}
                 execucao={execucao}
+                execucoes={solicitacao.execucoes}
+                agendarHorarios={agendarHorarios}
+                colaboradores={colaboradores}
             />
         </tr>
     );

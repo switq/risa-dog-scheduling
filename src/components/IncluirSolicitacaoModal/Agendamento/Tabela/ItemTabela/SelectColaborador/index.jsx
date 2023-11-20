@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState } from "react"
+import style from './SelectColaborador.module.scss'
 
-function SelectColaborador({ 
-    idServico, 
-    colaboradores, 
-    selecionarHorario, 
-    setColaboradores 
+function SelectColaborador({
+    execucao,
+    colaboradores,
+    selecionarColaborador,
 }) {
 
     const [colaboradorSelecionado, setColaboradorSelecionado] = useState();
@@ -19,20 +19,22 @@ function SelectColaborador({
         return flag;
     }
 
+    function handleChange(idColaborador) {
+        setColaboradorSelecionado(idColaborador);
+        selecionarColaborador(idColaborador);
+    }
+
     return (
         <select
             defaultValue=""
             value={colaboradorSelecionado}
-            onChange={e => {
-                const idColaborador = e.target.value;
-                setColaboradorSelecionado(idColaborador)
-                
-                selecionarHorario(idColaborador, idServico);
-            }
-            }>
+            onChange={e => handleChange(e.target.value)}
+            className={style.select}
+        >
             <option value="" disabled hidden>Selecione um colaborador</option>
+            
             {colaboradores.map((colaborador, index) => {
-                if (colaboradorExecuteServico(colaborador, idServico))
+                if (colaboradorExecuteServico(colaborador, execucao.idServico))
                     return (
                         <option
                             key={index}
@@ -42,6 +44,7 @@ function SelectColaborador({
                         </option>
                     )
             })}
+
         </select>
     );
 }

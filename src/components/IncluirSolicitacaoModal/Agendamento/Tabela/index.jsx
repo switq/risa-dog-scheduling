@@ -3,7 +3,13 @@ import ItemTabela from './ItemTabela';
 import { useState } from 'react';
 import Horarios from '../Horarios'
 
-function Tabela({ solicitacao, setSolicitacao, colaboradores, setColaboradores, ...props }) {
+function Tabela({ 
+    solicitacao, 
+    setSolicitacao, 
+    colaboradores,
+    servicos,
+
+}) {
 
     
 
@@ -20,22 +26,13 @@ function Tabela({ solicitacao, setSolicitacao, colaboradores, setColaboradores, 
 
             {solicitacao.execucoes.map((execucao) => (
                 <ItemTabela
+                    execucao={execucao}
                     solicitacao={solicitacao}
                     setSolicitacao={setSolicitacao}
-                    execucao={execucao}
                     colaboradores={colaboradores}
-                    setColaboradores={setColaboradores}
+                    servicos={servicos}
                 />
             ))}
-
-            {/* <tr>
-                <td>Banho</td>
-                <td>Diogo G.</td>
-                <td>14:00</td>
-                <td>50,00</td>
-                <td>R$ 20.00</td>
-                <td>R$ 70.00</td>
-            </tr> */}
         </table>
     );
 }
