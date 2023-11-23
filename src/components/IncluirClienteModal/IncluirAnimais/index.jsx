@@ -1,7 +1,6 @@
 import AnimalCard, { AddAnimal } from "../../common/AnimalCard";
 import IncluirAnimalModal from "./IncluirAnimalModal";
 import { useContext, useState } from "react";
-import IncluirClienteContext from "../../../contexts/IncluirClienteContext";
 import style from './IncluirAnimais.module.scss';
 
 

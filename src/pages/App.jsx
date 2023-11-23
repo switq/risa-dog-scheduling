@@ -2,6 +2,8 @@ import { ToastContainer } from "react-toastify"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import AgendasDia from './AgendasDia'
 import Modal from 'react-modal'
+import Login from "./Login";
+import RoutesApp from "../routes";
 
 function App() {
 
@@ -10,13 +12,7 @@ function App() {
 
   return (
     <>
-      <Router>
-        <Routes>
-          <Route exact path="/" element={<AgendasDia />}  />
-          <Route path="/agendas" element={<AgendasDia />} />
-        </Routes>
-      </Router>
-
+      <RoutesApp />
       <ToastContainer
         position="bottom-right"
         autoClose={5000}

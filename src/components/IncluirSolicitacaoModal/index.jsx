@@ -55,7 +55,7 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
         preco: 0,
         desconto: 0,
         status: '',
-        idEspecialidade: '',
+        idEspecialidade: 1,
         execucoes: [],
 
         idCliente: '',
