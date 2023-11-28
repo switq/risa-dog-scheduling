@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import style from './IncluirAnimais.module.scss';
 
 
-function IncluirAnimais({ cliente, setCliente, selecionado='', setSelecionado='', inclusao=false, ...props}) {
+function IncluirAnimais({ cliente, setCliente, selecionado='', setSelecionado='', inclusao=false, setAnimalSelecionado = false, ...props}) {
 
     const [isOpenAnimal, setIsOpenAnimal] = useState(false);
 
@@ -38,8 +38,9 @@ function IncluirAnimais({ cliente, setCliente, selecionado='', setSelecionado=''
                 <AddAnimal toggleModal={modalToggle} />
             </div>
 
-            <IncluirAnimalModal 
-                inclusao={inclusao} 
+            <IncluirAnimalModal
+                setAnimalSelecionado={setAnimalSelecionado}
+                inclusao={inclusao}
                 cliente={cliente} 
                 setCliente={setCliente} 
                 idAnimal={activeId} 

@@ -7,7 +7,7 @@ const ModalTittleStyled = styled(CColStyle)`
 `
 
 export const ModalTittle = ({ ...props }) => (
-    <ModalTittleStyled>
+    <ModalTittleStyled {...props}>
         <h2>{props.children}</h2>
         <hr />
     </ModalTittleStyled>

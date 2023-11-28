@@ -11,6 +11,7 @@ import { Trash } from '../../../../assets/icons/trash';
 import { InputSelect } from "../../../common/Inputs/InputSelect";
 import { postAnimal, putClienteAnimais } from "../../../../connection/ManterClienteAnimais";
 import axios from 'axios'
+import _ from "lodash"
 
 
 const incluirAnimalStyle = {
@@ -28,7 +29,7 @@ const incluirAnimalStyle = {
     },
 }
 
-export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente, setCliente, inclusao = false, ...props }) {
+export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente, setCliente, inclusao = false, setAnimalSelecionado=false, ...props }) {
 
     let initialValues = {
         nome: 'normal',
@@ -81,10 +82,10 @@ export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente,
 
             return newCliente;
         })
-        
+
         console.log(cliente.idCliente)
-        
-        if(inclusao) {
+
+        if (inclusao) {
             axios.put(`https://risa-dog.onrender.com/agendas/cliente/${cliente.idCliente}`, cliente)
                 .then((res) => console.log(res))
                 .catch((error) => console.log(error))
@@ -94,16 +95,32 @@ export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente,
         closeModal();
     }
 
-    const deletarAnimal = () => {
+    const deletarAnimal = async () => {
+        let clienteAtu = false;
+
         if (idAnimal != '') {
             const animalIndex = cliente.animais.findIndex(animal => animal.idAnimal == idAnimal);
-            setCliente(prevCliente => {
+            setCliente((prevCliente) => {
                 const newCliente = { ...prevCliente };
                 newCliente.animais.splice(animalIndex, 1);
+                clienteAtu = _.cloneDeep(newCliente);
+                
                 return newCliente;
             })
+
         }
         closeModal();
+        
+        if (inclusao && idAnimal != '') {
+            try {
+                const res = await putClienteAnimais(clienteAtu.idCliente, clienteAtu)
+                await setAnimalSelecionado('');
+                console.log(res);
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
     }
 
     return (

@@ -12,7 +12,7 @@ import { getAnimaisCliente, getClientesFiltrados } from "../../../connection/Man
 
 let clienteAtivo;
 
-function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSelecionado, }) {
+function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSelecionado, isOpen,}) {
 
     const [incluirClienteIsOpen, setIncluirClienteIsOpen] = useState(false);
     const openIncluirCliente = () => {
@@ -41,6 +41,7 @@ function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSele
                     cliente={cliente}
                     setCliente={setCliente}
                     inclusao={true}
+                    setAnimalSelecionado={setAnimalSelecionado}
                 />
 
         }

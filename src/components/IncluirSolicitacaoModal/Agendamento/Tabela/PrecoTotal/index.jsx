@@ -8,7 +8,11 @@ function PrecoTotal({
     const [valor, setValor] = useState(0);
 
     useEffect(() => {
-        const valorConvertido = calcularValorTotal().toFixed(2);
+        let valorBruto = calcularValorTotal();
+        const desconto = solicitacao.desconto ? parseFloat(solicitacao.desconto) : 0;
+
+        const valorDescontado = valorBruto - (valorBruto * desconto);
+        const valorConvertido = valorDescontado.toFixed(2);
         setValor(valorConvertido)
     }, [solicitacao])
 

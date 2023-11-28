@@ -11,8 +11,6 @@ function Tabela({
 
 }) {
 
-
-
     return (
         <>
             <table className={style.tabela}>

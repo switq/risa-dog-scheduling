@@ -3,8 +3,10 @@ import { useState, useEffect } from "react";
 import Horarios from "../../Horarios";
 import { Button } from "../../../../common/Button.style";
 import _ from 'lodash'
+import { rangeAgenda } from "../../../../../utils/conversoesAgenda";
 import InputMoney from "../../../../common/Inputs/InputMoney";
 import style from './ItemTabela.module.scss'
+import { onChangeMoney } from "../../../../../utils/onChangeInputs";
 
 
 const agendaZerada = '00000000000000000000000000000000000000000000';
@@ -25,6 +27,7 @@ function ItemTabela({
     function openHorarios() {
         setHorariosIsOpen(true)
     }
+
     function closeHorarios() { setHorariosIsOpen(false) }
 
     function selecionarColaborador(idColaborador) {
@@ -77,7 +80,14 @@ function ItemTabela({
     function renderHorarios() {
         if (!colaboradorSelecionado) return;
 
-        return <Button onClick={openHorarios}>Selecione um horário</Button>
+        return (
+            <Button
+                onClick={openHorarios}
+                className={style.buttonSelect}
+            >
+                Selecione um horário
+            </Button>
+        )
 
     }
 
@@ -112,18 +122,9 @@ function ItemTabela({
     }
 
     function onChangeAdicional(valor) {
-        let preco = valor ? parseFloat(valor).to : 0;
-        console.log(preco)
-        // if (preco === 0) return; 
+        let preco = onChangeMoney(valor);
 
-        let stringPreco = `${parseFloat(`${ valor }`.replace('.', ''))}`;
-        preco = parseFloat(`${valor}`.replace('.', ''));
-
-
-        preco /= 100
-
-
-
+        if (preco > 9999.99 || preco < 0) return;
 
         const newExecucao = _.cloneDeep(execucao);
         const indexExecucao = buscarIndexExecucao(newExecucao.idExecucao);
@@ -166,14 +167,45 @@ function ItemTabela({
         setSolicitacao(newSolicitacao);
     }
 
+    function montarAgenda() {
+        const execucoes = _.cloneDeep(solicitacao.execucoes);
+        const agendas = execucoes.map(exec => exec.agendaExecucao);
+
+        let agenda = '';
+
+        for (let i = 0; i < 44; i++) {
+            const hors = agendas.map(ag => ag[i]);
+            if (hors.includes('1'))
+                agenda += '1';
+            else
+                agenda += '0';
+        }
+
+        return agenda;
+    }
+
+    function atualizarHorariosSolicitacao() {
+        const agendaGeral = montarAgenda();
+        const { inicio, termino } = rangeAgenda(agendaGeral);
+
+        const newSolicitacao = _.cloneDeep(solicitacao);
+        newSolicitacao.horaInicio = inicio;
+        newSolicitacao.horaTermino = termino;
+
+        setSolicitacao(newSolicitacao)
+    }
+
+    useEffect(() => {
+        atualizarHorariosSolicitacao();
+    }, [execucao.agendaExecucao])
+
     useEffect(() => {
         renderTotal();
     }, [execucao.adicional]);
 
-
-
+    
     return (
-        <tr>
+        <tr className={style.itemTabela}>
             <td>{execucao.nomeServico}</td>
             <td>
                 {renderSelectColaborador()}
@@ -186,7 +218,7 @@ function ItemTabela({
             </td>
             <td>
                 <InputMoney
-                    value={execucao.adicional}
+                    value={execucao.adicional ? execucao.adicional.toFixed(2) : '0.00'}
                     onChange={onChangeAdicional}
                 />
             </td>

@@ -67,8 +67,6 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
 
   function resetSolicitacao() {
     setSolicitacao(_.cloneDeep(initialSolicitacao));
-    setAnimalSelecionado(null);
-    setCliente(null);
     setStep(0);
   }
 
@@ -79,6 +77,8 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
   }
 
   function verificarCliente() {
+    
+
     return animalSelecionado && cliente;
   }
 
@@ -105,6 +105,7 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
           setCliente={setCliente}
           animalSelecionado={animalSelecionado}
           setAnimalSelecionado={setAnimalSelecionado}
+          isOpen={isOpen}
         />;
       case 1:
         return <Agendamento
@@ -121,6 +122,33 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
     }
   }
 
+  function verificarSolicitacao() {
+    if (!solicitacao) 
+      return 'Solicitacao não existe';
+
+    if (!solicitacao.data)
+      return "Selecione uma data";
+
+    if (!solicitacao.execucoes.length) 
+      return 'Selecione serviços';
+
+    const execucoes = _.cloneDeep(solicitacao.execucoes);
+
+    const isColabSet = execucoes.reduce((acc, exec) => {
+      console.log(exec)
+      return !!exec.idColaborador && acc
+    }, [true])
+    if (!isColabSet)
+      return 'Selecione os colaboradores'
+
+    const agendas = execucoes.map(exec => exec.agendaExecucao);
+    const isHorariosSet = !agendas.includes("00000000000000000000000000000000000000000000");
+    if(!isHorariosSet)
+      return "Selecione os horários"
+
+    return false;
+  }
+
   const handleSubmit = async () => {
     const userToken = localStorage.getItem("user_token")
     if (!userToken) {
@@ -129,6 +157,12 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
     }
 
     console.log(solicitacao)
+
+    const ver = verificarSolicitacao()
+    if (ver) {
+      toast.warn(ver)
+      return;
+    }
 
     try {
       const user = JSON.parse(userToken).usuario
@@ -139,8 +173,11 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
 
       const res = await postSolicitacao(values);
 
+      toast.success("Solicitação registrada!");
+
     } catch (error) {
-      console.log(error)
+      console.log(JSON.parse(error.request.response).message)
+      toast.error(JSON.parse(error.request.response).message)
     }
 
   }
@@ -161,7 +198,7 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
 
       <div className={style.container}>
         <div>
-          <ModalTittle>{Steps[step]}</ModalTittle>
+          <ModalTittle style={{margin: '.5em 0'}}>{Steps[step]}</ModalTittle>
 
           <StepContainer>
             {Steps.map((item, index) => (
@@ -170,7 +207,8 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
                 <Step
                   key={index}
                   $ativo={index === step}
-                  style={{ width: '14rem' }}
+                  style={{ width: '20rem' }}
+                  className={style.stepContainer}
                 // onClick={_ => setStep(index)}
                 >
                   {item}

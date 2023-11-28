@@ -3,10 +3,13 @@ import Tabela from './Tabela';
 import SelecionarServicos from './SelecionarServicos';
 import { v4 as uuid4 } from 'uuid';
 import { InputDate } from '../../common/Inputs/InputDate'
+import InputDesconto from '../../common/Inputs/InputDesconto';
+import { HourDisplay } from '../../common/HourDisplay';
 import { Button } from '../../common/Button.style'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getAgendasColaboradores } from '../../../connection/ManterSolicitacoes';
-import _ from 'lodash'
+import _ from 'lodash';
+import { rangeAgenda } from '../../../utils/conversoesAgenda';
 
 
 const execucaoBase = {
@@ -108,24 +111,59 @@ function Agendamento({
         return [...newExecucoes];
     }
 
+    function handleChangeDesconto(valor) {
+        
+        let desc = valor ? parseFloat(valor) : 0;
+
+        if (desc > 1 || desc < 0) return;
+
+        if (desc === NaN) return;
+
+        const newSolicitacao = _.cloneDeep(solicitacao);
+        newSolicitacao.desconto = desc;
+        setSolicitacao(newSolicitacao);
+    }
+
+
     return (
-        <div>
+        <div className={style.container}>
             <p>{solicitacao.nomeCliente} | {solicitacao.nomeAnimal} - {solicitacao.especie} - {solicitacao.porte}</p>
             <hr />
+
             <div className={style.row}>
                 <InputDate
                     label={'Data:'}
                     value={solicitacao.data}
                     onChange={e => atualizarData(e.target.value)}
                 />
+
+                <HourDisplay 
+                    label={'Hora inicio:'}
+                    value={solicitacao.horaInicio}
+                />
+
+                <HourDisplay 
+                    label={'Hora término:'}
+                    value={solicitacao.horaTermino}
+                />
+
                 <Button onClick={selecionaServicos}>Selecionar serviços</Button>
             </div>
+
             <Tabela 
                 solicitacao={solicitacao}
                 setSolicitacao={setSolicitacao}
                 colaboradores={colaboradores}
                 servicos={servicos}
             />
+
+            <div className={style.deconto}>
+                <InputDesconto 
+                    value={solicitacao.desconto}
+                    onChange={handleChangeDesconto}
+                />
+            </div>
+
             <SelecionarServicos 
                 isOpen={selecionarServicosIsOpen}
                 closeModal={closeSelecionarServicos}

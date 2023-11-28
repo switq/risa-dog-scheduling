@@ -6,7 +6,7 @@ import { Button } from '../../../common/Button.style';
 import { useState, useEffect } from 'react';
 import _ from 'lodash';
 import { toast } from "react-toastify";
-import { gerarArrayHorarios } from '../../../../utils/conversoesAgenda';
+import { gerarArrayHorarios, rangeAgenda } from '../../../../utils/conversoesAgenda';
 
 
 const horariosStyle = {
@@ -70,12 +70,18 @@ function Horarios({
             for (let i = inicio; i <= termino; i++) {
                 newHorariosSelecionados[i] = 1;
             }
+        } 
+        else if (inicio >= 0) {
+            newHorariosSelecionados[inicio] = 1;
         }
         setHorariosSelecionados(newHorariosSelecionados)
     }, [inicio, termino])
 
     function submitAgendas() {
-        if (!(inicio >= 0) || !(termino > 0)) {
+        console.log(rangeAgenda(horariosSelecionados.join('')))
+
+
+        if (!(inicio >= 0)) {
             toast.warn("Selecione um intervalo de tempo");
             return;
         }
@@ -85,6 +91,8 @@ function Horarios({
         const horaInicio = horarios[inicio];
         const horaTermino = horarios[termino];
         agendarHorarios(agendaExecucao, horaInicio, horaTermino);
+
+        closeModal();
     }
 
     function toggleHorario(index) {
