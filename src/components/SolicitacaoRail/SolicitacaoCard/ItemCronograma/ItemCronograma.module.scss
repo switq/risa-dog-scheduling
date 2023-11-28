@@ -1,0 +1,31 @@
+.trilho {
+    display: flex;
+    min-height: 11rem;
+    border-radius: .5rem;
+    gap: 1em;
+    align-items: stretch;
+    margin-bottom: 1em;
+}
+
+.labelTrilho {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--magenta);
+    width: 6rem;
+    text-align: center;
+    color: var(--light);
+    font-weight: 500;
+    border-radius: .5rem 0 0 .5rem;
+}
+
+.cardContainer {
+    
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    padding: 1em;
+    gap: 1em;
+    background-color: var(--roxo03);
+}

@@ -174,6 +174,7 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
       const res = await postSolicitacao(values);
 
       toast.success("Solicitação registrada!");
+      handleClose();
 
     } catch (error) {
       console.log(JSON.parse(error.request.response).message)
@@ -182,15 +183,14 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
 
   }
 
+  function handleClose() {
+    resetSolicitacao();
+    closeModal();
+  }
 
   return (
     <Modal
-      onRequestClose={e => {
-        resetSolicitacao();
-        closeModal();
-
-        
-      }}
+      onRequestClose={handleClose}
       style={incluirSolicitacaoStyle}
       isOpen={isOpen}
       {...props}

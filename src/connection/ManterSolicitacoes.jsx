@@ -13,3 +13,11 @@ export function getAgendasColaboradores(data) {
 export function postSolicitacao(values) {
     return axios.post(`${url}/solicitacao/`, values);
 }
+
+export function getListaSolicitacao(data) {
+    return axios.get(`${url}/execucoes?data=${data}`);
+}
+
+export function putSolicitacao(id, values) {
+    return axios.put(`${url}/solicitacao/${id}`, values)
+}

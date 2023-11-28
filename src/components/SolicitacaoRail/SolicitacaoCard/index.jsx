@@ -4,44 +4,40 @@ import style from './SolicitacaoCard.module.scss'
 
 const CardContainer = styled.div`
         background-color: ${(props) => {
-        if (props.status === 'P') return `var(--magenta)`;
-        if (props.status === 'F') return `var(--verde)`;
-        if (props.status === 'C') return `var(--vermelho)`;
+        if (props.status[0] === 'P') return `var(--magenta)`;
+        if (props.status[0] === 'F') return `var(--verde)`;
+        if (props.status[0] === 'C') return `var(--vermelho)`;
     }};
     `
 
-function SolicitacaoCard({solicitacaoAAAAA}) {
-    const solicitacao = {
-        cliente: 'Luana',
-        animal:  'Marvin',
-        servicos: ['banho', 'tosa'],
-        horaInicio: '9:00',
-        horaTermino: '9:30',
-        status: 'F',
-    }
+function SolicitacaoCard({
+    solicitacao,
+    openResumo,
+}) {
+    
 
-    const {cliente, animal, servicos, horaInicio, horaTermino, status} = solicitacao;
+    const {nomeCliente, nomeAnimal, execucoes, horaInicio, horaTermino, status} = solicitacao;
 
     return ( 
         <CardContainer status={status} className={style.cardContainer}>
             <div className={style.col}>
-                <div className={style.horario}>{horaInicio} - {horaTermino}</div>
+                <div className={style.horario}>{horaInicio.slice(0, 5)} - {horaTermino.slice(0, 5)}</div>
             </div>
             
             <div className={style.row}>
                 <div>
-                    <h3>{cliente}</h3>
-                    <p>{animal}</p>
+                    <h3>{nomeCliente.slice(0, 17)}</h3>
+                    <p>{nomeAnimal.slice(0, 20)}</p>
                 </div>
                 <div>
-                    <span><Settings /></span>
+                    <span onClick={e => openResumo(solicitacao)}><Settings /></span>
                 </div>
             </div>
             <div>
-                {servicos.map((servico, index) => (
+                {execucoes.map((exec, index) => (
                     <>
                         {index !== 0 ? <span>{' + '}</span> : ''}
-                        <span key={index}>{servico}</span>
+                        <span className={style.listaServ} key={index}>{exec.nomeServico}</span>
                     </>
                 ))}
             </div>

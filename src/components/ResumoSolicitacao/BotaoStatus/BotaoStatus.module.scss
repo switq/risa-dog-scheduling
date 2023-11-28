@@ -1,0 +1,34 @@
+.botao {
+    background: #999;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    padding: 0.5em 1em;
+    color: #fff;
+    min-width: 12rem;
+    height: 3rem;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5em;
+}
+
+.icon path {
+    fill: white;
+}
+
+
+
+.verde {
+    background-color: var(--verde);
+}
+.verde:hover {
+    background-color: var(--verde02);
+}
+.vermelho {
+    background-color: var(--vermelho);
+}
+.vermelho:hover {
+    background-color: var(--vermelho02);
+}

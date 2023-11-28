@@ -1,0 +1,62 @@
+.botoes {
+    display: flex;
+    justify-content: space-around;
+}
+
+.close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-top: 2rem;
+    margin-right: 3rem;
+}
+
+.modalContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+
+.tabela {
+    width: 100%;
+    border-collapse: .5px;
+    border-radius: 10px;
+}
+
+.servicosTh {
+    width: 25;
+}
+
+.execucaoTh {
+    width: 30%;
+}
+
+.horaTh {
+    width: 25%;
+}
+
+.totalTh {
+    width: 20%;
+}
+
+.tabela th {
+    background-color: var(--magenta);
+    color: var(--light);
+    font-weight: 500;
+    padding: .5em;
+}
+
+.tabela tr {
+    background-color: var(--roxo03);
+}
+
+.tabela tr:nth-child(odd) {
+    background-color: var(--roxo05);
+}
+
+.tabela td {
+    padding: .5em;
+}
+
