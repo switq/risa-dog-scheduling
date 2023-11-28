@@ -45,7 +45,10 @@ function Agendamento({
         // get colaboradores
         getAgendasColaboradores(novaData)
             .then((res) => res.data)
-            .then((data) => setColaboradores([...data.colaboradores]))
+            .then((data) => {
+                console.log(data); 
+                setColaboradores([...data.colaboradores])
+            })
             .catch((error) => console.log(error));
 
         const newSolicitacao = _.cloneDeep(solicitacao);

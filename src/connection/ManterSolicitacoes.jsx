@@ -1,9 +1,15 @@
 import axios from "axios";
 
+const url = 'https://risa-dog.onrender.com'
+
 export function getServicos() {
-    return axios.get("https://risa-dog.onrender.com/servicos/");
+    return axios.get(`${url}/servicos/`);
 }
 
 export function getAgendasColaboradores(data) {
-    return axios.get(`https://risa-dog.onrender.com/agendas/colaboradores?data=${data}`);
+    return axios.get(`${url}/agendas/colaboradores?data=${data}`);
+}
+
+export function postSolicitacao(values) {
+    return axios.post(`${url}/solicitacao/`, values);
 }

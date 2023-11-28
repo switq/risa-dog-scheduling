@@ -9,8 +9,9 @@ import NovaSolicitacao from "./NovaSolicitacao";
 import Agendamento from "./Agendamento";
 import Pagamento from "./Pagamento";
 import style from "./IncluirSolicitacaoModal.module.scss";
-import { getServicos } from "../../connection/ManterSolicitacoes";
+import { getServicos, postSolicitacao } from "../../connection/ManterSolicitacoes";
 import _ from "lodash"
+import { toast } from "react-toastify";
 
 const incluirSolicitacaoStyle = {
   content: {
@@ -28,7 +29,27 @@ const incluirSolicitacaoStyle = {
   },
 }
 
-function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen, ...props }) {
+const initialSolicitacao = {
+  idSolicitacao: '',
+  data: '',
+  horaInicio: '',
+  horaTermino: '',
+  preco: 0,
+  desconto: 0,
+  status: '',
+  idColaborador: '',
+  execucoes: [],
+
+  idCliente: '',
+  nomeCliente: '',
+
+  idAnimal: '',
+  nomeAnimal: '',
+  especie: '',
+  porte: '',
+}
+
+function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
   const [step, setStep] = useState(0);
   const Steps = ["Nova Solicitação", "Agendamento"];
 
@@ -41,33 +62,15 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
 
   useEffect(() => {
     carregarServicos();
+    setSolicitacao(_.cloneDeep(initialSolicitacao));
   }, [isOpen])
 
-  useEffect(() => {
-    if (dadosSolicitacao) {
-      return
-    } else {
-      setSolicitacao({
-        idSolicitacao: '',
-        data: '',
-        horaInicio: '',
-        horaTermino: '',
-        preco: 0,
-        desconto: 0,
-        status: '',
-        idEspecialidade: 1,
-        execucoes: [],
-
-        idCliente: '',
-        nomeCliente: '',
-
-        idAnimal: '',
-        nomeAnimal: '',
-        especie: '',
-        porte: '',
-      })
-    }
-  }, [dadosSolicitacao])
+  function resetSolicitacao() {
+    setSolicitacao(_.cloneDeep(initialSolicitacao));
+    setAnimalSelecionado(null);
+    setCliente(null);
+    setStep(0);
+  }
 
   function carregarServicos() {
     getServicos()
@@ -83,14 +86,14 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
     const dadosClienteAnimal = {
       idCliente: cliente.idCliente,
       nomeCliente: cliente.nome,
-      
+
       idAnimal: animalSelecionado.idAnimal,
       nomeAnimal: animalSelecionado.nome,
       especie: animalSelecionado.especie,
       porte: animalSelecionado.porte,
     }
-    
-    const newSolicitacao = {..._.cloneDeep(solicitacao), ...dadosClienteAnimal};
+
+    const newSolicitacao = { ..._.cloneDeep(solicitacao), ...dadosClienteAnimal };
     setSolicitacao(newSolicitacao);
   }
 
@@ -118,10 +121,39 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
     }
   }
 
+  const handleSubmit = async () => {
+    const userToken = localStorage.getItem("user_token")
+    if (!userToken) {
+      toast.error("Usuário não logado");
+      return;
+    }
+
+    console.log(solicitacao)
+
+    try {
+      const user = JSON.parse(userToken).usuario
+      const values = {
+        ..._.cloneDeep(solicitacao),
+        idColaborador: user.idColaborador
+      };
+
+      const res = await postSolicitacao(values);
+
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
 
   return (
     <Modal
-      onRequestClose={closeModal}
+      onRequestClose={e => {
+        resetSolicitacao();
+        closeModal();
+
+        
+      }}
       style={incluirSolicitacaoStyle}
       isOpen={isOpen}
       {...props}
@@ -152,7 +184,13 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
 
         <BackFowardWrapper>
           <Button
-            onClick={_ => step !== 0 ? setStep(step - 1) : closeModal()}
+            onClick={_ => {
+              if (step === 0)
+                closeModal()
+
+              resetSolicitacao()
+              setStep(step - 1)
+            }}
             type={"button"}
           >
             {step !== 0 ? "Voltar" : "Fechar"}
@@ -167,9 +205,8 @@ function IncluirSolicitacaoModal({ dadosSolicitacao = false, closeModal, isOpen,
                 };
               }
               else if (step == 1) {
-                console.log(solicitacao)
+                handleSubmit();
               }
-
             }}
             type={"button"}
           >

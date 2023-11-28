@@ -2,9 +2,10 @@ import { Fragment } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AgendasDia from "../pages/AgendasDia";
 import Login from "../pages/Login";
+import useAuth from "../hooks/useAuth";
 
 const Private = ({ Item }) => {
-    const signed = false;
+    const {signed} = useAuth();
 
     return signed > 0 ? <Item /> : <Login />;
 }
@@ -14,8 +15,8 @@ const RoutesApp = () => {
         <BrowserRouter>
             <Fragment>
                 <Routes>
-                    <Route path="/agendas" element={<Private Item={AgendasDia} />} />
-                    <Route exact path="/" element={<Login />} />
+                    <Route exact path="/agendas" element={<Private Item={AgendasDia} />} />
+                    <Route path="/" element={<Private Item={AgendasDia} />} />
                     <Route exact path="/login" element={<Login />} />
                     <Route path="*" element={<Login />} />
                 </Routes>

@@ -6,6 +6,7 @@ import { Button } from '../../../common/Button.style';
 import { useState, useEffect } from 'react';
 import _ from 'lodash';
 import { toast } from "react-toastify";
+import { gerarArrayHorarios } from '../../../../utils/conversoesAgenda';
 
 
 const horariosStyle = {
@@ -25,12 +26,7 @@ const horariosStyle = {
 }
 
 // Criação dos horaios
-let horarios = [];
-for (let i = 9; i < 20; i++) {
-    for (let j = 0; j < 60; j += 15) {
-        horarios.push({ hora: `${i}:${j === 0 ? `0${j}` : j}` })
-    }
-}
+const horarios = gerarArrayHorarios();
 
 // Molde de agenda vazia
 const agendaMolde = []
