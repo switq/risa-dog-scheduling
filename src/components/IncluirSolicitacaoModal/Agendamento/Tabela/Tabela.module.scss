@@ -4,7 +4,6 @@
     border-radius: 10px;
 }
 
-
 .servicosTh {
     width: 20%;
 }
@@ -21,13 +20,14 @@
     width: 15%;
 }
 .totalTh {
-    width: 15%;
+    width: auto;
 }
 
 .tabela th {
     background-color: var(--magenta);
     color: var(--light);
     font-weight: 500;
+    padding: .5em;
 }
 
 .tabela tr {

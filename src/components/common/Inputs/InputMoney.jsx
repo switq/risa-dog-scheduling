@@ -9,10 +9,8 @@ function InputMoney({value, onChange}) {
         <input 
             value={value} 
             onChange={e => onChange(e.target.value)} 
-            type="number" 
-            step="0.01" 
-            min="0"
-            max="9999"
+
+            
         />
      );
 }

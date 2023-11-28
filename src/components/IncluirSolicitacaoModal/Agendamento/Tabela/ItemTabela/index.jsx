@@ -4,7 +4,8 @@ import Horarios from "../../Horarios";
 import { Button } from "../../../../common/Button.style";
 import _ from 'lodash'
 import InputMoney from "../../../../common/Inputs/InputMoney";
-import { Component } from "react";
+import style from './ItemTabela.module.scss'
+
 
 const agendaZerada = '00000000000000000000000000000000000000000000';
 
@@ -111,7 +112,19 @@ function ItemTabela({
     }
 
     function onChangeAdicional(valor) {
-        const preco = valor ? parseFloat(valor) : 0;
+        let preco = valor ? parseFloat(valor).to : 0;
+        console.log(preco)
+        // if (preco === 0) return; 
+
+        let stringPreco = `${parseFloat(`${ valor }`.replace('.', ''))}`;
+        preco = parseFloat(`${valor}`.replace('.', ''));
+
+
+        preco /= 100
+
+
+
+
         const newExecucao = _.cloneDeep(execucao);
         const indexExecucao = buscarIndexExecucao(newExecucao.idExecucao);
         newExecucao.adicional = preco;
@@ -168,7 +181,7 @@ function ItemTabela({
             <td>
                 {renderHorarios()}
             </td>
-            <td>
+            <td className={`${style.campoPreco}`}>
                 {renderPreco()}
             </td>
             <td>
@@ -177,8 +190,8 @@ function ItemTabela({
                     onChange={onChangeAdicional}
                 />
             </td>
-            <td>
-                {execucao.total}
+            <td className={`${style.campoPreco}`}>
+                {execucao.total ? parseFloat(execucao.total).toFixed(2) : '0.00'}
             </td>
 
             <Horarios
