@@ -38,6 +38,7 @@ export const GlobalStyle = createGlobalStyle`
         font-family: var(--fontPadrao);
         font-weigth: 500;
         font-size: 16px;
+        overflow-x: hidden;
     }
 
     input[type="search"]::-webkit-search-decoration,
