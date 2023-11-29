@@ -38,6 +38,7 @@ function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSele
                 />;
             case 1:
                 console.log(cliente)
+                if(!cliente) return
                 return <IncluirAnimais
                     selecionado={animalSelecionado}
                     setSelecionado={setAnimalSelecionado}
@@ -107,7 +108,6 @@ function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSele
     const handleChange = (value) => {
         setBusca(value);
         
-
         getClientesFiltrados(value)
             .then((response) => JSON.parse(response.request.response))
             .then((json) => {

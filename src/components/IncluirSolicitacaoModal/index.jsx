@@ -67,6 +67,7 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
 
   function resetSolicitacao() {
     setSolicitacao(_.cloneDeep(initialSolicitacao));
+    setCliente('')
     setStep(0);
   }
 
@@ -77,8 +78,6 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
   }
 
   function verificarCliente() {
-    
-
     return animalSelecionado && cliente;
   }
 
