@@ -2,7 +2,7 @@ import Modal from "react-modal";
 import Agendamento from "../IncluirSolicitacaoModal/Agendamento";
 import { useEffect, useState } from "react";
 import { getServicos } from "../../connection/ManterSolicitacoes";
-import { getAgendasColaboradores } from "../../connection/ManterSolicitacoes";
+import { getAgendasColaboradores, getAgendasColaboradoresComId } from "../../connection/ManterSolicitacoes";
 import { ModalTittle } from "../common/Modal.style";
 import { Button } from "../common/Button.style";
 import style from './AlterarSolicitacao.module.scss'
@@ -74,7 +74,7 @@ function AlterarSolicitacao({
     }
 
 
-    function handleClose(atualizar=false) {
+    function handleClose(atualizar = false) {
         closeModal(atualizar);
     }
 
@@ -85,17 +85,27 @@ function AlterarSolicitacao({
     }
 
     function acessarColaboradores() {
-        getAgendasColaboradores(solicitacao.data)
-            .then((res) => res.data)
-            .then((data) => {
-                console.log(data);
-                setColaboradores([...data.colaboradores])
-            })
-            .catch((error) => console.log(error));
+        if (!solicitacao.idSolicitacao) {
+            getAgendasColaboradores(solicitacao.data)
+                .then((res) => res.data)
+                .then((data) => {
+                    console.log(data);
+                    setColaboradores([...data.colaboradores])
+                })
+                .catch((error) => console.log(error));
+        } else {
+            getAgendasColaboradoresComId(solicitacao.idSolicitacao, solicitacao.data)
+                .then((res) => res.data)
+                .then((data) => {
+                    console.log(data);
+                    setColaboradores([...data.colaboradores])
+                })
+                .catch((error) => console.log(error));
+        }
     }
 
     function renderAgendamento() {
-        if(servicos && newSolicitacao && colaboradores) return (
+        if (servicos && newSolicitacao && colaboradores) return (
             <Agendamento
                 solicitacao={newSolicitacao}
                 setSolicitacao={setNewSolicitacao}
@@ -142,7 +152,7 @@ function AlterarSolicitacao({
         >
             <div className={style.container}>
                 <div>
-                    <ModalTittle style={{marginBottom: '.5em'}}>Alterar Solicitação</ModalTittle>
+                    <ModalTittle style={{ marginBottom: '.5em' }}>Alterar Solicitação</ModalTittle>
                     {renderAgendamento()}
 
                 </div>

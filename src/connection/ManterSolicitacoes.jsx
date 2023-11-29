@@ -9,6 +9,9 @@ export function getServicos() {
 export function getAgendasColaboradores(data) {
     return axios.get(`${url}/agendas/colaboradores?data=${data}`);
 }
+export function getAgendasColaboradoresComId(id, data) {
+    return axios.get(`${url}/agendas/colaboradores/${id}?data=${data}`);
+}
 
 export function postSolicitacao(values) {
     return axios.post(`${url}/solicitacao/`, values);

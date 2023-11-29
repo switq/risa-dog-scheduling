@@ -8,6 +8,7 @@ import SearchList from "./SearchList";
 import IncluirAnimais from "../../IncluirClienteModal/IncluirAnimais";
 import IncluirClienteModal from "../../IncluirClienteModal";
 import { getAnimaisCliente, getClientesFiltrados } from "../../../connection/ManterClienteAnimais";
+import _ from 'lodash'
 
 
 let clienteAtivo;
@@ -25,6 +26,8 @@ function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSele
     const [busca, setBusca] = useState('');
     const [listaClientes, setListaClientes] = useState([]);
     const [clienteIsSetted, setClienteIsSetted] = useState(0);
+
+    const [isLoading, setIsLoading] = useState();
 
     function changeCampoCliente() {
         switch (clienteIsSetted) {
@@ -103,6 +106,8 @@ function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSele
 
     const handleChange = (value) => {
         setBusca(value);
+        
+
         getClientesFiltrados(value)
             .then((response) => JSON.parse(response.request.response))
             .then((json) => {

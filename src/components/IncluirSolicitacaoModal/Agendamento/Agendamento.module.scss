@@ -2,6 +2,12 @@
     display: flex;
     justify-content: space-between;
     margin: .5em 0;
+    align-items: end;
+}
+
+.rowData {
+    display: flex;
+
 }
 
 .deconto {
@@ -14,4 +20,14 @@
 .container {
     display: flex;
     flex-direction: column;
+}
+
+.dataSelector {
+    display: flex;
+    align-items: end;
+    gap: .5em;
+}
+
+.spin {
+    position: absolute;
 }

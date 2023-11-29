@@ -7,9 +7,11 @@ import InputDesconto from '../../common/Inputs/InputDesconto';
 import { HourDisplay } from '../../common/HourDisplay';
 import { Button } from '../../common/Button.style'
 import { useEffect, useState } from 'react';
-import { getAgendasColaboradores } from '../../../connection/ManterSolicitacoes';
+import { getAgendasColaboradores, getAgendasColaboradoresComId } from '../../../connection/ManterSolicitacoes';
 import _ from 'lodash';
 import { rangeAgenda } from '../../../utils/conversoesAgenda';
+import React from 'react';
+import Spinner from '@atlaskit/spinner';
 
 
 const execucaoBase = {
@@ -36,6 +38,9 @@ function Agendamento({
 
     const [selecionarServicosIsOpen, setSelecionarServicosIsOpen] = useState(false);
     
+    const [isLoading, setIsLoading] = useState();
+
+
     function closeSelecionarServicos() {
         setSelecionarServicosIsOpen(false);
     }
@@ -45,14 +50,27 @@ function Agendamento({
     }
 
     async function atualizarData(novaData) {
+        setIsLoading(true);
         // get colaboradores
-        getAgendasColaboradores(novaData)
-            .then((res) => res.data)
-            .then((data) => {
-                console.log(data); 
-                setColaboradores([...data.colaboradores])
-            })
-            .catch((error) => console.log(error));
+
+        if (!solicitacao.idSolicitacao) {
+            getAgendasColaboradores(novaData)
+                .then((res) => res.data)
+                .then((data) => {
+                    console.log(data); 
+                    setColaboradores([...data.colaboradores])
+                })
+                .catch((error) => console.log(error));            
+        } else {
+            getAgendasColaboradoresComId(solicitacao.idSolicitacao, novaData)
+                .then((res) => res.data)
+                .then((data) => {
+                    console.log(data);
+                    setColaboradores([...data.colaboradores])
+                })
+                .catch((error) => console.log(error));
+        }
+
 
         const newSolicitacao = _.cloneDeep(solicitacao);
         newSolicitacao.data = novaData;
@@ -67,6 +85,7 @@ function Agendamento({
         await setSolicitacao(newSolicitacao);
         newSolicitacao.execucoes = [...adicionarExecucoes(listaServicos)];
         await setSolicitacao(newSolicitacao);
+        setIsLoading(false);
     }
 
     function selecionaServicos() {
@@ -131,11 +150,15 @@ function Agendamento({
             <hr />
 
             <div className={style.row}>
-                <InputDate
-                    label={'Data:'}
-                    value={solicitacao.data}
-                    onChange={e => atualizarData(e.target.value)}
-                />
+                <div className={style.dataSelector}>
+                    <InputDate
+                        label={'Data:'}
+                        value={solicitacao.data}
+                        onChange={e => atualizarData(e.target.value)}
+                    
+                    />
+                    {isLoading ? <Spinner className={style.spin} size={'medium'} /> : ''}
+                </div>
 
                 <HourDisplay 
                     label={'Hora inicio:'}
