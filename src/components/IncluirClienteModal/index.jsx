@@ -116,8 +116,13 @@ function IncluirClienteModal({
             .min(9, "O CEP deve possuir 9 caracteres")
             .max(9, "O CEP deve possuir 9 caracteres")
             .required("Campo obrigatório"),
-        numeroRes: Yup.string()
+        numeroRes: Yup.number()
+            .min(0, 'O número da residencia não pode ser negativo')
+            .max(99999, "O número da residencia não pode ultrapassar 99999")
             .required("Campo obrigatório"),
+        complemento: Yup.string()
+            .max(40, "O complemento deve possuir menos de 40 caracteres"),
+
 
     });
 
