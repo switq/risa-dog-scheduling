@@ -41,6 +41,7 @@ function Agendamento({
     const [isLoading, setIsLoading] = useState();
 
     const dtAtual = new Date();
+    const dataAtutu = `${dtAtual.getFullYear()}-${dtAtual.getMonth() + 1}-${dtAtual.getDate()}`;
 
     function closeSelecionarServicos() {
         setSelecionarServicosIsOpen(false);
@@ -53,7 +54,7 @@ function Agendamento({
     async function atualizarData(novaData) {
         setIsLoading(true);
         // get colaboradores
-        if (new Date(novaData) < dtAtual) {
+        if (new Date(novaData) < new Date(dataAtutu)) {
             setIsLoading(false);
             return
         }
