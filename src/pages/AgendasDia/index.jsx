@@ -11,6 +11,7 @@ import ResumoSolicitacao from "../../components/ResumoSolicitacao";
 import { getListaSolicitacao } from "../../connection/ManterSolicitacoes";
 import _ from 'lodash';
 import SolicitacaoRail from "../../components/SolicitacaoRail";
+import AlterarSolicitacao from "../../components/AlterarSolicitacao";
 
 function AgendasDia() {
     const [listaSolicitacoes, setListaSolicitacoes] = useState([]);
@@ -47,10 +48,18 @@ function AgendasDia() {
         }
         await setData(dataValue);
     }
-
     useEffect(() => {
         handleDataUpdate();
     }, []);
+
+    const [alterarSolicitacaoIsOpen, setAlterarSolicitacaoIsOpen] = useState(false);
+    function openAlterarSolicitacao() {
+        setAlterarSolicitacaoIsOpen(true)
+    }
+    function closeAlterarSolicitacao() {
+        setAlterarSolicitacaoIsOpen(false)
+    }
+
 
     async function acessarListaSolicitacao() {
         try {
@@ -76,11 +85,19 @@ function AgendasDia() {
     function loadResumo() {
         if(!selectedSolicitacao) return;
         return (
-            <ResumoSolicitacao
-                isOpen={resumoIsOpen}
-                closeModal={closeResumo}
-                solicitacao={selectedSolicitacao}
-            />
+            <>
+                <ResumoSolicitacao
+                    isOpen={resumoIsOpen}
+                    closeModal={closeResumo}
+                    solicitacao={selectedSolicitacao}
+                    openAlterarSolicitacao={openAlterarSolicitacao}
+                />
+                <AlterarSolicitacao
+                    isOpen={alterarSolicitacaoIsOpen}
+                    closeModal={closeAlterarSolicitacao}
+                    solicitacao={solicitacao}
+                />
+            </>
         )
     }
 
@@ -117,6 +134,8 @@ function AgendasDia() {
             />
 
             {loadResumo()}
+            
+
         </div>
     );
 }

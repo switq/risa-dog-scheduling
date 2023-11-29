@@ -8,6 +8,7 @@ import { Close } from "../../assets/icons/close";
 import _ from 'lodash'
 import { putSolicitacao } from "../../connection/ManterSolicitacoes";
 import { toast } from "react-toastify";
+import BotaoEditar from "./BotaoEditar";
 
 const resumoStyle = {
     content: {
@@ -17,8 +18,8 @@ const resumoStyle = {
         bottom: 'auto',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
-        width: '650px',
-        height: '550px',
+        width: '750px',
+        height: '650px',
         borderRadius: '15px',
         padding: '3rem',
         overflowX: 'hidden',
@@ -29,6 +30,7 @@ function ResumoSolicitacao({
     isOpen,
     closeModal,
     solicitacao,
+    openAlterarSolicitacao,
 }) {
 
     function handleClose(atualizar=false) {
@@ -55,11 +57,17 @@ function ResumoSolicitacao({
         handleClose(true);
     }
 
+    function handleEdit() {
+        handleClose();
+        openAlterarSolicitacao();
+    }
+
     const renderBotoesStatus = () => {
         console.log(solicitacao.status)
         if (solicitacao.status === 'Pendente')
             return (
                 <div className={style.botoes}>
+                    <BotaoEditar onclick={handleEdit} />
                     <BotaoStatus onclick={handleChangeStatus} status={"C"} />
                     <BotaoStatus onclick={handleChangeStatus} status={"F"} />
                 </div>
@@ -75,7 +83,7 @@ function ResumoSolicitacao({
             <div className={style.modalContainer}>
                 <div>
                     <span onClick={handleClose} className={style.close}><Close /></span>
-                    <ModalTittle>Resumo solicitacão</ModalTittle>
+                    <ModalTittle className={style.tittle}>Resumo solicitacão</ModalTittle>
 
                     <p>{solicitacao.nomeCliente} | {solicitacao.nomeAnimal} - {solicitacao.especie} - {solicitacao.porte}</p>
                     <hr />

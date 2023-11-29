@@ -12,23 +12,12 @@
     align-items: center;
     justify-content: center;
     gap: .5em;
+    background-color: var(--roxo);
 }
 
 .icon path {
     fill: white;
+    size: 20px;
 }
 
 
-
-.verde {
-    background-color: var(--verde);
-}
-.verde:hover {
-    background-color: var(--verde02);
-}
-.vermelho {
-    background-color: var(--vermelho);
-}
-.vermelho:hover {
-    background-color: var(--vermelho02);
-}

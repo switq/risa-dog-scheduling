@@ -19,7 +19,7 @@ function ItemTabelaResumo({
     return (
         <tr className={style.itemTabela}>
             <td>{servico}</td>
-            <td>{colaborador}</td>
+            <td>{colaborador.slice(0,13)}</td>
             <td className={style.hora}>{renderHora()}</td>
             <td className={style.campoPreco}>{total.toFixed(2)}</td>
         </tr>

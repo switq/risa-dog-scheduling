@@ -23,9 +23,9 @@ function SolicitacaoRail({
 
     cronogramaBase.forEach(cron => {
         cron.solicitacoes = listaSol.filter(soli => {
-            let dtInicio = `${soli.horaInicio}`;
-            dtInicio = dtInicio.slice(0,5);
-            return dtInicio === cron.horario;
+            let dtInicio = parseInt(`${soli.horaInicio}`.slice(0, 2));
+            
+            return dtInicio === parseInt(cron.horario.slice(0, 2));
         })
     })
 
