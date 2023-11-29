@@ -53,6 +53,10 @@ function Agendamento({
     async function atualizarData(novaData) {
         setIsLoading(true);
         // get colaboradores
+        if (new Date(novaData) < dtAtual) {
+            setIsLoading(false);
+            return
+        }
 
         if (!solicitacao.idSolicitacao) {
             getAgendasColaboradores(novaData)
