@@ -45,7 +45,6 @@ function ResumoSolicitacao({
                 ..._.cloneDeep(solicitacao),
                 status: status,
             }
-            console.log(newSolicitacao)
             const res = await putSolicitacao(newSolicitacao.idSolicitacao, newSolicitacao)
             toast.success(res.data.message)
             
@@ -63,7 +62,6 @@ function ResumoSolicitacao({
     }
 
     const renderBotoesStatus = () => {
-        console.log(solicitacao.status)
         if (solicitacao.status === 'Pendente')
             return (
                 <div className={style.botoes}>

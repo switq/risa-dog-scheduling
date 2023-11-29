@@ -78,8 +78,6 @@ function Horarios({
     }, [inicio, termino])
 
     function submitAgendas() {
-        console.log(rangeAgenda(horariosSelecionados.join('')))
-
 
         if (!(inicio >= 0)) {
             toast.warn("Selecione um intervalo de tempo");

@@ -71,13 +71,11 @@ export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente,
 
         setCliente(prevCliente => {
             const newCliente = { ...prevCliente };
-            console.log(idAnimal)
 
             if (idAnimal != '') {
                 const animalIndex = newCliente.animais.findIndex(animal => animal.idAnimal == idAnimal);
                 newCliente.animais[animalIndex] = { ...newCliente.animais[animalIndex], ...values };
-                console.log('handleSubmit')
-                console.log(newCliente)
+
             } else {
                 newCliente.animais.push({ idAnimal: uuid4(), ...values });
             }
@@ -86,11 +84,9 @@ export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente,
             return newCliente;
         })
 
-        console.log(cliente.idCliente)
 
         if (inclusao) {
             axios.put(`https://risa-dog.onrender.com/agendas/cliente/${cliente.idCliente}`, cliente)
-                .then((res) => console.log(res))
                 .catch((error) => console.log(error))
         }
 
@@ -118,7 +114,6 @@ export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente,
             try {
                 const res = await putClienteAnimais(clienteAtu.idCliente, clienteAtu)
                 await setAnimalSelecionado('');
-                console.log(res);
             } catch (e) {
                 console.log(e)
             }

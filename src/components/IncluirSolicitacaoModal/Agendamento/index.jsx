@@ -58,7 +58,6 @@ function Agendamento({
             getAgendasColaboradores(novaData)
                 .then((res) => res.data)
                 .then((data) => {
-                    console.log(data); 
                     setColaboradores([...data.colaboradores])
                 })
                 .catch((error) => console.log(error));            
@@ -66,7 +65,6 @@ function Agendamento({
             getAgendasColaboradoresComId(solicitacao.idSolicitacao, novaData)
                 .then((res) => res.data)
                 .then((data) => {
-                    console.log(data);
                     setColaboradores([...data.colaboradores])
                 })
                 .catch((error) => console.log(error));
@@ -105,14 +103,12 @@ function Agendamento({
         const newSolicitacao = _.cloneDeep(solicitacao);
         newSolicitacao.execucoes = [...newExecucoes]
 
-        console.log(newSolicitacao.execucoes)
         setSolicitacao(newSolicitacao);
     }
 
     function removerExecucoes(listaServicos) {
         const execucoes = _.cloneDeep(solicitacao.execucoes);
         const newExecucoes = execucoes.filter(exec => !listaServicos.includes(exec.idServico))
-        console.log(newExecucoes);
 
         return [...newExecucoes];
     }

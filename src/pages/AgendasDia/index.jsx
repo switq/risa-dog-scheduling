@@ -71,10 +71,8 @@ function AgendasDia() {
     async function acessarListaSolicitacao() {
         setIsLoading(true);
         try {
-            console.log(data)
             const res = await getListaSolicitacao(data);
             const resData = res.data;
-            console.log(resData)
             await setListaSolicitacoes(_.cloneDeep(resData));
         }
         catch (e) {
@@ -117,7 +115,6 @@ function AgendasDia() {
             newFiltros.push(value[0])
         } else {
             const indexFiltro = newFiltros.findIndex(f => f === value[0])
-            console.log(indexFiltro)
             newFiltros.splice(indexFiltro, 1);
         }
 

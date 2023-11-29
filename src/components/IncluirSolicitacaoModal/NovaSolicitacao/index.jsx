@@ -37,7 +37,6 @@ function NovaSolicitacao({ cliente, setCliente, animalSelecionado, setAnimalSele
                     setCliente={selecionarCliente}
                 />;
             case 1:
-                console.log(cliente)
                 if(!cliente) return
                 return <IncluirAnimais
                     selecionado={animalSelecionado}

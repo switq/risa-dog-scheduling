@@ -51,19 +51,15 @@ function IncluirClienteModal({
             let response;
 
             if (values.idCliente == '') {
-                console.log('post')
                 values.animais = [...cliente.animais];
                 response = await incluirCliente(values);
             }
             else {
-                console.log('put')
                 response = await putClienteAnimais(values.idCliente, values);
             }
-            console.log('cliente')
-            console.log(values)
+
 
             toast.success(response.data.message);
-            console.log(response);
             setCliente((prevCliente) => {
                 prevCliente.animais = []
                 return prevCliente;
@@ -72,7 +68,6 @@ function IncluirClienteModal({
 
         } catch (error) {
 
-            console.log(JSON.parse(error.request.response).error);
             toast.error(JSON.parse(error.request.response).error);
         }
         setStep(0);

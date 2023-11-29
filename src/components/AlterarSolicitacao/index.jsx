@@ -49,8 +49,7 @@ function AlterarSolicitacao({
             return;
         }
 
-        console.log('newSolicitacao')
-        console.log(newSolicitacao)
+        
 
         const ver = verificarSolicitacao()
         if (ver) {
@@ -69,7 +68,6 @@ function AlterarSolicitacao({
             handleClose(true);
 
         } catch (error) {
-            console.log(JSON.parse(error.request.response).message)
             toast.error(JSON.parse(error.request.response).message)
         }
     }
@@ -90,7 +88,6 @@ function AlterarSolicitacao({
             getAgendasColaboradores(solicitacao.data)
                 .then((res) => res.data)
                 .then((data) => {
-                    console.log(data);
                     setColaboradores([...data.colaboradores])
                 })
                 .catch((error) => console.log(error));
@@ -98,7 +95,6 @@ function AlterarSolicitacao({
             getAgendasColaboradoresComId(solicitacao.idSolicitacao, solicitacao.data)
                 .then((res) => res.data)
                 .then((data) => {
-                    console.log(data);
                     setColaboradores([...data.colaboradores])
                 })
                 .catch((error) => console.log(error));
@@ -130,7 +126,6 @@ function AlterarSolicitacao({
         const execucoes = _.cloneDeep(newSolicitacao.execucoes);
 
         const isColabSet = execucoes.reduce((acc, exec) => {
-            console.log(exec)
             return !!exec.idColaborador && acc
         }, [true])
         if (!isColabSet)

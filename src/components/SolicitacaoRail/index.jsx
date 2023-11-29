@@ -19,7 +19,6 @@ function SolicitacaoRail({
             solicitacoes: [],
         })
     }
-    console.log(listaSol)
 
     cronogramaBase.forEach(cron => {
         cron.solicitacoes = listaSol.filter(soli => {
@@ -34,8 +33,7 @@ function SolicitacaoRail({
 
     useEffect(() => {
         const newCronograma = gerarCronogramaBase(listaSolicitacoes);
-        console.log('crono');
-        console.log(newCronograma);
+
 
         setCronograma(newCronograma);
     }, [listaSolicitacoes]);

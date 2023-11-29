@@ -134,7 +134,6 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
     const execucoes = _.cloneDeep(solicitacao.execucoes);
 
     const isColabSet = execucoes.reduce((acc, exec) => {
-      console.log(exec)
       return !!exec.idColaborador && acc
     }, [true])
     if (!isColabSet)
@@ -155,7 +154,6 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
       return;
     }
 
-    console.log(solicitacao)
 
     const ver = verificarSolicitacao()
     if (ver) {
@@ -176,7 +174,6 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
       handleClose();
 
     } catch (error) {
-      console.log(JSON.parse(error.request.response).message)
       toast.error(JSON.parse(error.request.response).message)
     }
 
