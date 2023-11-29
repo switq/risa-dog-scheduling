@@ -12,6 +12,10 @@ import { getListaSolicitacao } from "../../connection/ManterSolicitacoes";
 import _ from 'lodash';
 import SolicitacaoRail from "../../components/SolicitacaoRail";
 import AlterarSolicitacao from "../../components/AlterarSolicitacao";
+import React from 'react';
+import Spinner from '@atlaskit/spinner';
+
+
 
 function AgendasDia() {
     const [listaSolicitacoes, setListaSolicitacoes] = useState([]);
@@ -64,6 +68,7 @@ function AgendasDia() {
     const [filtros, setFiltros] = useState(['P', 'F', 'C']);
 
     async function acessarListaSolicitacao() {
+        setIsLoading(true);
         try {
             console.log(data)
             const res = await getListaSolicitacao(data);
@@ -74,6 +79,7 @@ function AgendasDia() {
         catch (e) {
             console.log(e)
         }
+        setIsLoading(false);
     }
 
     function atualizarLista() {
@@ -121,6 +127,8 @@ function AgendasDia() {
         return filtros.includes(sol.status[0]); 
     })
 
+    const [isLoading, setIsLoading] = useState(false);
+
     return (
         <div>
 
@@ -133,7 +141,10 @@ function AgendasDia() {
                 </div>
 
                 <div className={style.flexColumnWrapper}>
-                    <InputDate value={data} onChange={handleDataUpdate} className={style.dataFilter} label="Data:" />
+                    <div className={style.dataSelector}>
+                        <InputDate value={data} onChange={handleDataUpdate} className={style.dataFilter} label="Data:" />
+                        {isLoading ? <Spinner className={style.spin} size={'medium'} /> : ''}
+                    </div>
 
                     <div className={style.filtros}>
                         <InputCheckbox onChange={handleFiltroChange} value={filtros.includes('P')} label="Pendentes" name="P"/>
