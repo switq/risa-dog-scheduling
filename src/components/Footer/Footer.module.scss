@@ -1,0 +1,39 @@
+.headerContainer {
+    width: 100vw;
+    padding: 1rem 2rem;
+    height: 5.5rem;
+    background-color: var(--magenta);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logoWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.logout path {
+    fill: white;
+}
+
+.logout {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 3rem;
+}
+
+.row {
+    display: flex;
+    gap: 2em;
+    align-items: center;
+}
+
+h1 {
+    color: var(--light);
+    font-size: 1.5em;
+    font-weight: 600;
+}
