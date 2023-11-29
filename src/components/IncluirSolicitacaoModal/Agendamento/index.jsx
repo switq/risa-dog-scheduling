@@ -147,7 +147,7 @@ function Agendamento({
 
     return (
         <div className={style.container}>
-            <p>{solicitacao.nomeCliente} | {solicitacao.nomeAnimal} - {solicitacao.especie} - {solicitacao.porte}</p>
+            <p>{solicitacao.nomeCliente.slice(0, 25)} | {solicitacao.nomeAnimal.slice(0, 25)} - {solicitacao.especie.slice(0, 25)} - {solicitacao.porte}</p>
             <hr />
 
             <div className={style.row}>

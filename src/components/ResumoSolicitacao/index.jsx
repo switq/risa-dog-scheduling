@@ -83,7 +83,7 @@ function ResumoSolicitacao({
                     <span onClick={handleClose} className={style.close}><Close /></span>
                     <ModalTittle className={style.tittle}>Resumo solicitacão</ModalTittle>
 
-                    <p>{solicitacao.nomeCliente} | {solicitacao.nomeAnimal} - {solicitacao.especie} - {solicitacao.porte}</p>
+                    <p>{solicitacao.nomeCliente.slice(0, 25)} | {solicitacao.nomeAnimal.slice(0, 25)} - {solicitacao.especie} - {solicitacao.porte}</p>
                     <hr />
 
 
