@@ -45,6 +45,10 @@ export const GlobalStyle = createGlobalStyle`
     input[type="password"]::-ms-clear {
         display: none;
     }
+    input::-ms-reveal,
+    input::-ms-clear {
+        display: none;
+    }
 
     input[type="search"]::-webkit-search-decoration,
     input[type="search"]::-webkit-search-cancel-button,

@@ -14,6 +14,7 @@ import SolicitacaoRail from "../../components/SolicitacaoRail";
 import AlterarSolicitacao from "../../components/AlterarSolicitacao";
 import React from 'react';
 import Spinner from '@atlaskit/spinner';
+import Footer from "../../components/Footer";
 
 
 
@@ -159,6 +160,7 @@ function AgendasDia() {
                 />
             </main>
 
+            <Footer />
             <IncluirSolicitacaoModal
                 isOpen={solicitacaoIsOpen}
                 closeModal={closeSolicitacao}

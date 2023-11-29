@@ -1,4 +1,4 @@
-import style from './Header.module.scss'
+import style from './Footer.module.scss'
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import { LogoutIcon } from '../../assets/icons/logoutIcon';
@@ -16,12 +16,9 @@ function Footer() {
 
     return (
         <footer className={style.headerContainer}>
-            <div className={style.row}>
+            <div  className={style.row}>
                 <span className={style.logoWrapper}><img className={style.logo} src={logo} alt="risa dog logo" /></span>
-                <h1>Agendas do dia</h1>
-
             </div>
-            <span className={style.logout} onClick={handleSignOut}><LogoutIcon /></span>
         </footer>
     );
 }
