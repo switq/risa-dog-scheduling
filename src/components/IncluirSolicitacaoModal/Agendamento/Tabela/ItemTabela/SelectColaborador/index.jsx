@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import style from './SelectColaborador.module.scss'
 
 function SelectColaborador({
@@ -18,6 +18,12 @@ function SelectColaborador({
         })
         return flag;
     }
+
+    useEffect(() => {
+        if (!!execucao.idColaborador) {
+            setColaboradorSelecionado(execucao.idColaborador)
+        }
+    }, []);
 
     function handleChange(idColaborador) {
         setColaboradorSelecionado(idColaborador);

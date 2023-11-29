@@ -6,8 +6,8 @@ const { InputWrapper, Label, RequiredLabel, FieldStyled, ErrorStyled } = styles(
 export const InputCheckbox = ({ name, value, onChange, label, required, ...props }) => {
     return (
         <InputWrapper>
-            <FieldStyled value={value} onChange={onChange} name={name} type="checkbox" autoComplete="off" {...props} />
-            <Label>
+            <FieldStyled name={name} checked={value} onChange={e => onChange(e, label)} type="checkbox" autoComplete="off" {...props} />
+            <Label for={name}>
                 {label || name}
                 {required && <RequiredLabel>*</RequiredLabel>}
             </Label>
@@ -30,9 +30,6 @@ function styles() {
     outline: none;
     height: 2.2em;
 
-    &:focus {
-        outline: 2px solid #999;
-    }
 `;
 
     const Label = styled.label`

@@ -56,10 +56,12 @@ function AgendasDia() {
     function openAlterarSolicitacao() {
         setAlterarSolicitacaoIsOpen(true)
     }
-    function closeAlterarSolicitacao() {
+    function closeAlterarSolicitacao(atualizar=false) {
         setAlterarSolicitacaoIsOpen(false)
+        if(atualizar) atualizarLista()
     }
 
+    const [filtros, setFiltros] = useState(['P', 'F', 'C']);
 
     async function acessarListaSolicitacao() {
         try {
@@ -95,11 +97,29 @@ function AgendasDia() {
                 <AlterarSolicitacao
                     isOpen={alterarSolicitacaoIsOpen}
                     closeModal={closeAlterarSolicitacao}
-                    solicitacao={solicitacao}
+                    solicitacao={selectedSolicitacao}
                 />
             </>
         )
     }
+
+    function handleFiltroChange(e, value) {
+        const isChecked = e.target.checked
+        const newFiltros = [...filtros]
+        if (isChecked) {
+            newFiltros.push(value[0])
+        } else {
+            const indexFiltro = newFiltros.findIndex(f => f === value[0])
+            console.log(indexFiltro)
+            newFiltros.splice(indexFiltro, 1);
+        }
+
+        setFiltros(newFiltros)
+    }
+
+    const listaSolicitacoesFiltradas = listaSolicitacoes.filter(sol =>{
+        return filtros.includes(sol.status[0]); 
+    })
 
     return (
         <div>
@@ -116,14 +136,14 @@ function AgendasDia() {
                     <InputDate value={data} onChange={handleDataUpdate} className={style.dataFilter} label="Data:" />
 
                     <div className={style.filtros}>
-                        <InputCheckbox label="Pendentes" />
-                        <InputCheckbox label="Finalizados" />
-                        <InputCheckbox label="Cancelados" />
+                        <InputCheckbox onChange={handleFiltroChange} value={filtros.includes('P')} label="Pendentes" name="P"/>
+                        <InputCheckbox onChange={handleFiltroChange} value={filtros.includes('F')} label="Finalizados" name="F"/>
+                        <InputCheckbox onChange={handleFiltroChange} value={filtros.includes('C')} label="Cancelados" name="C"/>
                     </div>
                 </div>
 
                 <SolicitacaoRail
-                    listaSolicitacoes={listaSolicitacoes}
+                    listaSolicitacoes={listaSolicitacoesFiltradas}
                     openResumo={openResumo}
                 />
             </main>

@@ -3,7 +3,7 @@ import { CCol, CColStyle } from "./Containers.style";
 
 const ModalTittleStyled = styled(CColStyle)`
     gap: .5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 `
 
 export const ModalTittle = ({ ...props }) => (

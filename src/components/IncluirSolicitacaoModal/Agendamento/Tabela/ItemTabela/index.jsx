@@ -78,17 +78,28 @@ function ItemTabela({
     }
 
     function renderHorarios() {
-        if (!colaboradorSelecionado) return;
+        if (!colaboradorSelecionado && !execucao.idColaborador) return;
 
         return (
             <Button
                 onClick={openHorarios}
-                className={style.buttonSelect}
+                className={`${style.buttonSelect} ${verificarAgenda() ? '' : `${style.buttonSelectMarcado}`}`}
+                $roxo={!verificarAgenda()}
             >
-                Selecione um horário
+                {gerarInicioTermino()}
+                
             </Button>
         )
 
+    }
+
+    const verificarAgenda = () => execucao.agendaExecucao === agendaZerada
+
+    function gerarInicioTermino() {
+        if (execucao.agendaExecucao === agendaZerada)
+            return 'Selecione um horário';
+        const {inicio, termino} = rangeAgenda(execucao.agendaExecucao);
+        return `${inicio.slice(0, 5)} - ${termino.slice(0, 5)}`
     }
 
     function renderSelectColaborador() {
