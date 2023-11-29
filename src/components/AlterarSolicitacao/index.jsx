@@ -49,6 +49,7 @@ function AlterarSolicitacao({
             return;
         }
 
+        console.log('newSolicitacao')
         console.log(newSolicitacao)
 
         const ver = verificarSolicitacao()

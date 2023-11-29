@@ -137,7 +137,7 @@ function AgendasDia() {
             <main>
                 <div className={style.flexColumnWrapper}>
                     <Legendas />
-                    <Button onClick={openSolicitacao}>Nova Solicitação</Button>
+                    <Button className={style.botaoNovaSolicitacao} onClick={openSolicitacao}>Nova Solicitação</Button>
                 </div>
 
                 <div className={style.flexColumnWrapper}>
