@@ -11,7 +11,7 @@ function IncluirCliente() {
             <BasicInput name="email" />
             <CRow>
                 <BasicInput name="cpf" label={"CPF"} required />
-                <BasicInput name="dtNasc" label={"Data de Nascimento"} type={"date"} />
+                <BasicInput name="dtNasc" label={"Data de Nascimento"} type={"date"} required />
             </CRow>
             <CRow>
                 <BasicInput name="tel1" label={"Telefone"} required />

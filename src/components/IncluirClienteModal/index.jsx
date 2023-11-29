@@ -105,7 +105,8 @@ function IncluirClienteModal({
             .max(11, "O CPF deve possuir 11 caracteres")
             .required("Campo obrigatório"),
         dtNasc: Yup.date()
-            .max(new Date(), "Não é possível incluir uma data futura"),
+            .max(new Date(), "Não é possível incluir uma data futura")
+            .required("Campo obrigatória"),
         // lembrar de colocar uma data minima se possivel
         tel1: Yup.string()
             .max(13, "O número de celular deve possuir no máximo 13 caracteres")
