@@ -22,6 +22,8 @@ export const GlobalStyle = createGlobalStyle`
         --vermelho02: #A83F3F;
         --gray: #D8D8D8;
         --gray02: #CCC;
+        --cinza: #888;
+        --cinza02: #999;
 
         --fontPadrao: 'Poppins', sans-serif;
     }

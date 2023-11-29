@@ -40,6 +40,7 @@ function Agendamento({
     
     const [isLoading, setIsLoading] = useState();
 
+    const dtAtual = new Date();
 
     function closeSelecionarServicos() {
         setSelecionarServicosIsOpen(false);
@@ -155,7 +156,7 @@ function Agendamento({
                         label={'Data:'}
                         value={solicitacao.data}
                         onChange={e => atualizarData(e.target.value)}
-                    
+                        min={`${dtAtual.getFullYear()}-${dtAtual.getMonth() + 1}-${dtAtual.getDate()}`}
                     />
                     {isLoading ? <Spinner className={style.spin} size={'medium'} /> : ''}
                 </div>

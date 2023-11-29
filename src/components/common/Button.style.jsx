@@ -11,8 +11,8 @@ export const Button = styled.button`
     min-width: 8rem;
     
     ${props => {
-        let cor = props.$roxo ?  {bc: "var(--roxo)", bch: "var(--roxo02)"} : {bc: "var(--magenta)", bch: "var(--magenta02)"};
-        
+        let cor = props.$roxo ? { bc: "var(--roxo)", bch: "var(--roxo02)" } : { bc: "var(--magenta)", bch: "var(--magenta02)" };
+        cor = props.$cinza ? { bc: "var(--cinza)", bch: "var(--cinza02)" } : cor
         return `
             background-color: ${cor.bc};
             &:hover {

@@ -235,12 +235,15 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
           </Button>
           <Button
             $roxo
+            $cinza={!verificarCliente()}
             onClick={(e) => {
               if (step === 0) {
                 if (verificarCliente()) {
                   adicionarCliente()
                   setStep(step + 1);
+                  return;
                 };
+                toast.warn("Selecione um cliente e um animal para prosseguir.")
               }
               else if (step == 1) {
                 handleSubmit();
@@ -248,7 +251,7 @@ function IncluirSolicitacaoModal({ closeModal, isOpen, ...props }) {
             }}
             type={"button"}
           >
-            {step !== 2 ? "Próximo" : "Salvar"}
+            {step !== 1 ? "Próximo" : "Salvar"}
           </Button>
         </BackFowardWrapper>
       </div>

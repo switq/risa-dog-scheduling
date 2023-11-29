@@ -32,7 +32,7 @@ const incluirAnimalStyle = {
 export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente, setCliente, inclusao = false, setAnimalSelecionado=false, ...props }) {
 
     let initialValues = {
-        nome: 'normal',
+        nome: '',
         rga: '',
         porte: 'P',
         genero: 'F',
@@ -56,12 +56,15 @@ export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente,
 
     const validationSchema = Yup.object({
         nome: Yup.string()
-            .required("Campo obrigatório"),
+            .required("Campo obrigatório")
+            .max(40, "O nome deve possuir menos de 40 caracteres"),
         rga: Yup.string()
             .min(11, "O RGA deve possuir 11 caracteres")
             .max(11, "O RGA deve possuir 11 caracteres"),
         especie: Yup.string()
+            .max(30, "A espécie deve possuir menos de 30 caracteres")
             .required("Campo obrigatório"),
+            
     })
 
     const handleSubmit = (values, { setSubmitting }) => {

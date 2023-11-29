@@ -100,9 +100,11 @@ function IncluirClienteModal({
     const validationSchema = Yup.object({
         nome: Yup.string()
             .min(1, "O nome deve possuir no mínimo 1 letra")
+            .max(40, "O nome deve possuir menos de 40 caracteres")
             .required("Campo obrigatório"),
         email: Yup.string()
-            .email("E-mail inválido"),
+            .email("E-mail inválido")
+            .max(44, "O email deve possuir menos de 44 caracteres"),
         cpf: Yup.string()
             .min(11, "O CPF deve possuir 11 caracteres")
             .max(11, "O CPF deve possuir 11 caracteres")
