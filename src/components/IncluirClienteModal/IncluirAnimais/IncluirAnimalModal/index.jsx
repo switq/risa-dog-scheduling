@@ -64,6 +64,9 @@ export default function IncluirAnimalModal({ idAnimal = '', closeModal, cliente,
         especie: Yup.string()
             .max(30, "A espécie deve possuir menos de 30 caracteres")
             .required("Campo obrigatório"),
+        raca: Yup.string()
+            .max(30, "A raça deve possuir menos de 30 caracteres")
+            .required("Campo obrigatório"),
         obs: Yup.string()
             .max(400, "O campo deve não pode ultrapassar 400 caracteres")
     })
